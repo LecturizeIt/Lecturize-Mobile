@@ -50,7 +50,7 @@ const LoginForm = () => {
   const onSubmit = (data: LoginFormValues) => {
     loginMutation.mutate(data, {
       onSuccess: async (data) => {
-        const user = await login(data.accessToken!);
+        await login(data.accessToken!);
         toast.show({
           placement: "top",
           render: () => <SuccessfulLoginToast />

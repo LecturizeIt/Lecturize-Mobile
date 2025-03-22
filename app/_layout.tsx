@@ -1,8 +1,8 @@
 import Providers from '@/components/providers';
 import "@/global.css";
 import { Drawer } from 'expo-router/drawer';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StatusBar } from "expo-status-bar";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 
 export default function RootLayout() {
@@ -14,7 +14,7 @@ export default function RootLayout() {
           <Drawer.Screen
             name="(tabs)"
             options={{
-              drawerLabel: 'Main',
+              drawerLabel: 'Home',
               title: 'Home',
             }}
           />

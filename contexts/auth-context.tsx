@@ -8,7 +8,7 @@ type AuthContextState = {
   user?: User,
   login: (userAccessToken: string) => Promise<User>,
   register: () => void,
-  logout: () => void
+  logout: () => Promise<void>
 }
 
 const { ContextProvider, useContext } = createContext<AuthContextState>();
