@@ -34,8 +34,9 @@ const Layout = () => {
         options={{
           title: "Register",
           tabBarIcon: ({ color }) => <Icon as={User} className='m-2 size-4' color={color} />,
-          href: null
+          href: null,
         }}
+        
       />
 
     </Tabs>

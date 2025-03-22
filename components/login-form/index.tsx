@@ -5,21 +5,21 @@ import { EyeIcon, EyeOffIcon } from "@/components/ui/icon";
 import { Image } from '@/components/ui/image';
 import { Input, InputField, InputIcon, InputSlot } from '@/components/ui/input';
 import { Text } from '@/components/ui/text';
+import {
+  useToast
+} from "@/components/ui/toast";
 import { VStack } from '@/components/ui/vstack';
+import { useAuthContext } from '@/contexts/auth-context';
+import { useLoginMutation } from '@/lib/mutations';
 import { LoginFormValues, loginSchema } from '@/lib/schemas/login-schema';
 import { zodResolver } from "@hookform/resolvers/zod";
+import { isAxiosError } from 'axios';
+import { useRouter } from 'expo-router';
 import { AlertCircle, Mail } from 'lucide-react-native';
 import { useState } from 'react';
 import { Controller, useForm } from "react-hook-form";
 import Logo from "../../assets/images/logo.png";
-import {
-  useToast,
-  Toast,
-  ToastTitle,
-  ToastDescription,
-} from "@/components/ui/toast"
-import { useLoginMutation } from '@/lib/mutations';
-import { isAxiosError } from 'axios';
+import SuccessfulLoginToast from '../successful-login';
 
 
 const defaultValues: LoginFormValues = {
@@ -29,8 +29,10 @@ const defaultValues: LoginFormValues = {
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const toast = useToast();
   const loginMutation = useLoginMutation();
+  const { login } = useAuthContext();
+  const toast = useToast();
+  const router = useRouter();
 
   const handleState = () => {
     setShowPassword(prev => !prev);
@@ -47,54 +49,38 @@ const LoginForm = () => {
 
   const onSubmit = (data: LoginFormValues) => {
     loginMutation.mutate(data, {
-      onSuccess: (data) => {
+      onSuccess: async (data) => {
+        const user = await login(data.accessToken!);
         toast.show({
           placement: "top",
-          render: () => (
-            <Toast
-              className='p-4 gap-3 w-full max-w-[386px] shadow-hard-2'
-            >
-              <ToastTitle>Response</ToastTitle>
-              <ToastDescription>
-                <Text className='text-primary-0'>{JSON.stringify(data, null, 2)}</Text>
-              </ToastDescription>
-            </Toast>
-          )
-        })
+          render: () => <SuccessfulLoginToast />
+        });
+        router.push("/");
       },
-      onError: (err) => {
-        if (isAxiosError(err)) {
-          toast.show({
-            placement: "top",
-            render: () => (
-              <Toast
-                className='p-4 gap-3 w-full max-w-[386px] shadow-hard-2'
-              >
-                <ToastTitle>Response</ToastTitle>
-                <ToastDescription>
-                  <Text className='text-error-0'>{JSON.stringify(err.response?.data, null, 2)}</Text>
-                </ToastDescription>
-              </Toast>
-            )
-          })
+      onError: (error) => {
+        if (isAxiosError(error)) {
+          const serverError = error.response?.data;
+          form.setError("root", { message: serverError.detail });
         }
       }
     });
   };
 
   return (
-    <FormControl className="p-4 border rounded-lg border-outline-300 w-full" >
+    <FormControl className="p-4 border rounded-lg border-outline-300 w-full" isInvalid={Boolean(errors.root)}>
       <Image source={Logo} alt='project logo'
         size='xl'
         className='mx-auto'
       />
       <VStack space="xl">
-        <Heading className="text-typography-900">Login</Heading>
+        <Heading className="text-typography-900 text-center">Login</Heading>
         <FormControlError>
-          <FormControlErrorIcon as={AlertCircle} />
-          <FormControlErrorText>
-            Choose one time slot for the meeting
-          </FormControlErrorText>
+          <VStack className='w-full px-[1rem] gap-4'>
+            <FormControlErrorIcon as={AlertCircle} className='mx-auto' />
+            <FormControlErrorText className='w-full text-center'>
+              {errors.root?.message}
+            </FormControlErrorText>
+          </VStack>
         </FormControlError>
         <VStack space="xs">
 
@@ -148,8 +134,12 @@ const LoginForm = () => {
           )}
 
         </VStack>
-        <Button className="ml-auto" onPress={handleSubmit(onSubmit)}>
-          <ButtonText className="text-typography-0">Save</ButtonText>
+        <Button
+          className="mx-auto w-full max-w-[100px]"
+          onPress={handleSubmit(onSubmit)}
+          isDisabled={loginMutation.isPending}
+        >
+          <ButtonText className="text-typography-0">Entrar</ButtonText>
         </Button>
       </VStack>
     </FormControl>
