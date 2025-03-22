@@ -8,8 +8,8 @@ const Login = () => {
     <Box className='flex-1 items-center justify-center p-[3rem]'>
       <LoginForm />
       <Link href={"/(tabs)/register"} asChild>
-        <Button variant='link'>
-          <ButtonText>Registre-se</ButtonText>
+        <Button variant='link' className=''>
+          <ButtonText className='underline'>Não tem uma conta? Registre-se</ButtonText>
         </Button>
       </Link>
     </Box>

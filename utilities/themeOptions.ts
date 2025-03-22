@@ -1,14 +1,21 @@
 import { fonts } from "@react-navigation/native/src/theming/fonts";
+import { DefaultTheme, DarkTheme } from "@react-navigation/native";
 
-export const MyLightTheme = {
+export const CustomLightTheme: typeof DefaultTheme = {
   dark: false,
   colors: {
-    primary: "#000",
-    background: "#ffffff",
-    card: "rgb(255, 255, 255)",
-    text: "#000",
-    border: "#962dff",
-    notification: "rgb(55, 222, 58)",
+    ...DefaultTheme.colors,
+    background: "rgb(242, 242, 242)",
+    // border: "#000",
   },
   fonts,
 };
+
+export const CustomDarkTheme: typeof DefaultTheme = {
+  dark: true,
+  colors: {
+    ...DarkTheme.colors,
+    background: "#212121"
+  },
+  fonts
+}

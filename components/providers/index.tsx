@@ -1,15 +1,15 @@
 import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
 import { AuthProvider } from '@/contexts/auth-context';
 import { Theme } from '@/types/theme';
-import { MyLightTheme } from '@/utilities/themeOptions';
+import { CustomLightTheme } from '@/utilities/themeOptions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { DarkTheme, ThemeProvider } from '@react-navigation/native';
 import {
   QueryClient,
   QueryClientProvider
 } from '@tanstack/react-query';
 import { useColorScheme } from "nativewind";
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { PropsWithChildren, useEffect } from 'react';
 
 const queryClient = new QueryClient();
 
@@ -30,7 +30,7 @@ const Providers = ({ children }: PropsWithChildren) => {
   }, [colorScheme]);
 
   return (
-    <ThemeProvider value={colorScheme === "light" ? MyLightTheme : DarkTheme}>
+    <ThemeProvider value={colorScheme === "light" ? CustomLightTheme : DarkTheme}>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <GluestackUIProvider mode={colorScheme}>

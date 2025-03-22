@@ -5,21 +5,15 @@ import { EyeIcon, EyeOffIcon } from "@/components/ui/icon";
 import { Image } from '@/components/ui/image';
 import { Input, InputField, InputIcon, InputSlot } from '@/components/ui/input';
 import { Text } from '@/components/ui/text';
-import {
-  useToast
-} from "@/components/ui/toast";
 import { VStack } from '@/components/ui/vstack';
-import { useAuthContext } from '@/contexts/auth-context';
 import { useLoginMutation } from '@/lib/mutations';
 import { LoginFormValues, loginSchema } from '@/lib/schemas/login-schema';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isAxiosError } from 'axios';
-import { useRouter } from 'expo-router';
 import { AlertCircle, Mail } from 'lucide-react-native';
 import { useState } from 'react';
 import { Controller, useForm } from "react-hook-form";
 import Logo from "../../assets/images/logo.png";
-import SuccessfulLoginToast from '../successful-login';
 
 
 const defaultValues: LoginFormValues = {
@@ -30,9 +24,6 @@ const defaultValues: LoginFormValues = {
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const loginMutation = useLoginMutation();
-  const { login } = useAuthContext();
-  const toast = useToast();
-  const router = useRouter();
 
   const handleState = () => {
     setShowPassword(prev => !prev);
@@ -49,14 +40,6 @@ const LoginForm = () => {
 
   const onSubmit = (data: LoginFormValues) => {
     loginMutation.mutate(data, {
-      onSuccess: async (data) => {
-        await login(data.accessToken!);
-        toast.show({
-          placement: "top",
-          render: () => <SuccessfulLoginToast />
-        });
-        router.push("/");
-      },
       onError: (error) => {
         if (isAxiosError(error)) {
           const serverError = error.response?.data;

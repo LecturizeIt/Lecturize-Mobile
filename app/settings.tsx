@@ -14,10 +14,8 @@ const Settings = () => {
     router.push("/");
   }
 
-
-
   return (
-    <Box className='bg-background-0 flex-1 justify-start p-[5rem] gap-[1rem]'>
+    <Box className='flex-1 justify-start p-[5rem] gap-[1rem]'>
       <Heading className='color-primary-900 text-center'>Settings</Heading>
       <AppearanceModal />
       {user && <LogoutDialog handleLogout={handleLogout} />}

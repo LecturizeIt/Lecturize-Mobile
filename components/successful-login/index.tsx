@@ -15,7 +15,7 @@ const SuccessfulLoginToast = () => {
         action="success"
       >
         <ToastTitle>
-          {`Hello, ${user?.username}!`}
+          {`Bem vindo, ${user?.username}!`}
         </ToastTitle>
       </Toast>
     </SafeAreaView>
