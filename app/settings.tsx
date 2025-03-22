@@ -1,8 +1,6 @@
 import AppearanceModal from '@/components/appearance-modal';
 import { Box } from '@/components/ui/box';
-import { Center } from '@/components/ui/center';
 import { Heading } from '@/components/ui/heading';
-import { Text } from '@/components/ui/text';
 
 const Settings = () => {
     return (
