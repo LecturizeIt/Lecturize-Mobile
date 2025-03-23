@@ -6,7 +6,7 @@ import { Image } from '@/components/ui/image';
 import { Input, InputField, InputIcon, InputSlot } from '@/components/ui/input';
 import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
-import { useLoginMutation } from '@/lib/mutations';
+import { useLoginMutation } from '@/lib/mutations/auth-mutations';
 import { LoginFormValues, loginSchema } from '@/lib/schemas/login-schema';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isAxiosError } from 'axios';

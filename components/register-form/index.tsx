@@ -5,16 +5,11 @@ import { EyeIcon, EyeOffIcon } from "@/components/ui/icon";
 import { Image } from '@/components/ui/image';
 import { Input, InputField, InputIcon, InputSlot } from '@/components/ui/input';
 import { Text } from "@/components/ui/text";
-import {
-  useToast
-} from "@/components/ui/toast";
 import { VStack } from '@/components/ui/vstack';
-import { useAuthContext } from '@/contexts/auth-context';
-import { useLoginMutation, useRegisterMutation } from '@/lib/mutations';
+import { useRegisterMutation } from '@/lib/mutations/auth-mutations';
 import { RegisterFormValues, registerSchema } from '@/lib/schemas/register-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isAxiosError } from 'axios';
-import { useRouter } from 'expo-router';
 import { AlertCircle, CircleUserRound, Mail } from 'lucide-react-native';
 import { useState } from "react";
 import { Controller, useForm } from 'react-hook-form';

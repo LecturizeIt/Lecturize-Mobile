@@ -16,7 +16,7 @@ const CustomHeader = ({ navigation, route, options }: DrawerHeaderProps) => {
     <SafeAreaView>
       <HStack style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingEnd: 10, paddingBottom: 10 }}>
         <DrawerToggleButton tintColor={`${colorScheme === "light" ? "#000" : "#fff"}`} />
-        <HeaderTitle style={{ position: "relative", top: 3 }}>
+        <HeaderTitle style={{ position: "relative", top: 3, left: 10 }}>
           {title}
         </HeaderTitle>
         <HeaderButton onPress={() => router.replace("/")}>

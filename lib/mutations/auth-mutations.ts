@@ -2,7 +2,7 @@ import { useAuthContext } from "@/contexts/auth-context";
 import useLoginToast from "@/hooks/use-login-toast";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import { login, register } from "./apis/auth-api";
+import { login, register } from "@/lib/apis/auth-api";
 
 export const useLoginMutation = () => {
   const router = useRouter();

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchUser } from "./apis/auth-api";
+import { fetchUser } from "@/lib/apis/auth-api";
 
 export const useUserQuery = (jwt: string) => useQuery({
   queryKey: ["user"],

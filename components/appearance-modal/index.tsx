@@ -39,7 +39,7 @@ const AppearanceModal = () => {
 
   useEffect(() => {
     const setThemeFromStorage = async () => {
-      const storageTheme = await AsyncStorage.getItem("theme") as Theme ?? "light";
+      const storageTheme = await AsyncStorage.getItem("theme") as Theme ?? "system";
       setValue(storageTheme);
     }
 
