@@ -18,6 +18,11 @@ const LogoutDialog = ({ handleLogout }: { handleLogout: () => Promise<void> }) =
   const [showAlertDialog, setShowAlertDialog] = useState(false);
   const handleClose = () => setShowAlertDialog(false);
 
+  const handleAction = async () => {
+    await handleLogout(); 
+    handleClose();
+  }
+
   return (
     <>
       <Button variant='outline' action="negative" onPress={() => setShowAlertDialog(true)}>
@@ -41,7 +46,7 @@ const LogoutDialog = ({ handleLogout }: { handleLogout: () => Promise<void> }) =
             <Button
               size="sm"
               action="negative"
-              onPress={async () => { await handleLogout(); handleClose() }}
+              onPress={handleAction}
               className="w-[100px]"
               variant="outline"
             >

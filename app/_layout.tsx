@@ -4,7 +4,7 @@ import { Icon } from '@/components/ui/icon';
 import "@/global.css";
 import { Drawer } from 'expo-router/drawer';
 import { StatusBar } from "expo-status-bar";
-import { House, Settings } from 'lucide-react-native';
+import { House, KeyRound, Settings } from 'lucide-react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 
@@ -22,8 +22,16 @@ export default function RootLayout() {
             name="(tabs)"
             options={{
               drawerLabel: 'Home',
-              title: 'Home',
+              title: "Home",
               drawerIcon: ({ color }) => <Icon as={House} color={color} />
+            }}
+          />
+          <Drawer.Screen
+            name="(auth)"
+            options={{
+              drawerLabel: 'Autenticação',
+              title: 'Autenticação',
+              drawerIcon: ({ color }) => <Icon as={KeyRound} color={color} />
             }}
           />
           <Drawer.Screen

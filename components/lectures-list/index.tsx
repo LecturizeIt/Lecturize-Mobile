@@ -1,9 +1,10 @@
 import { useLecturesQuery } from "@/lib/queries/lecture-queries";
 import { FlatList } from "react-native";
-import Lecture from "./lecture";
+import NoLecturesFound from "../no-lectures-found";
+import LectureCard from "./lecture-card";
 
 const LecturesList = () => {
-  const { data: lectures } = useLecturesQuery();
+  const { data: lectures, isLoading, isError } = useLecturesQuery();
   return (
     <>
       <FlatList
@@ -11,10 +12,12 @@ const LecturesList = () => {
         keyExtractor={(lecture) => lecture.id}
         numColumns={1}
         scrollEnabled={false}
-        className="mt-5"
+        className="mt-5 w-full"
+        contentContainerStyle={{ flex: 1, display: "flex" }}
         renderItem={({ item: lecture }) => (
-          <Lecture lecture={lecture} />
+          <LectureCard lecture={lecture} />
         )}
+        ListEmptyComponent={!isLoading && !isError ? <NoLecturesFound /> : null}
       />
     </>
   )

@@ -17,7 +17,7 @@ export const useLoginMutation = () => {
     onSuccess: async (data) => {
       await loginUser(data.accessToken!);
       showSuccessfulLoginToast();
-      router.push("/");
+      router.replace("/");
     }
   });
 }

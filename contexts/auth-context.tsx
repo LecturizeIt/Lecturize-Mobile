@@ -7,35 +7,47 @@ import { createContext } from "./create-context";
 type AuthContextState = {
   user?: User,
   login: (userAccessToken: string) => Promise<User>,
-  register: () => void,
-  logout: () => Promise<void>
+  logout: () => Promise<void>,
+  isAuthenticated: boolean,
+  isLoading: boolean
 }
 
 const { ContextProvider, useContext } = createContext<AuthContextState>();
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<User>();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const getTokenAsync = async () => {
       let userAccessToken: string | null;
-      
+
       try {
         userAccessToken = await AsyncStorage.getItem("accessToken");
         if (userAccessToken === null) {
           throw new Error("No access token in storage");
         }
+        await login(userAccessToken);
+
       } catch (err) {
         console.log(err);
-        logout();
-        return;
+        await logout();
+
+      } finally {
+        setIsLoading(false);
       }
 
-      await login(userAccessToken);
     }
 
+    setIsLoading(true);
     getTokenAsync();
+    // eslint-disable-next-line
   }, []);
+
+  const getUserFromAccessToken = async (accessToken: string) => {
+    const user = await fetchUser(accessToken);
+    return user;
+  }
 
   const login = async (userAccessToken: string) => {
     const user = await getUserFromAccessToken(userAccessToken);
@@ -44,21 +56,15 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     return user;
   }
 
-  const getUserFromAccessToken = async (accessToken: string) => {
-    const user = await fetchUser(accessToken);
-    return user;
-  }
-
-  const logout = async () => { 
-    AsyncStorage.removeItem("accessToken");
+  const logout = async () => {
+    await AsyncStorage.removeItem("accessToken");
     setUser(undefined);
   }
 
-  const register = () => { }
-  
+  const isAuthenticated = user !== undefined;
 
   return (
-    <ContextProvider value={{ login, logout, register, user }}>
+    <ContextProvider value={{ login, logout, user, isAuthenticated, isLoading }}>
       {children}
     </ContextProvider>
   )

@@ -106,7 +106,6 @@ function validatePresentialType(address: string | undefined, issues: z.IssueData
   }
 }
 
-
 function validateHybridType(url: string | undefined, address: string | undefined, maximumCapacity: number | undefined) {
   const issues: z.IssueData[] = [];
   validateOnlineType(url, issues);

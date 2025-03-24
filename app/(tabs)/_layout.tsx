@@ -1,16 +1,10 @@
-import { Box } from "@/components/ui/box";
-import { Icon } from '@/components/ui/icon';
-import { Text } from '@/components/ui/text';
-import { useAuthContext } from '@/contexts/auth-context';
+import TabIcon from "@/components/tab-icon";
 import { Tabs } from 'expo-router';
 import { BookOpenText, Home, User } from "lucide-react-native";
-import { View } from 'react-native';
 
 const ACCENT_PURPLE = "#962dff";
 
 const Layout = () => {
-  const { user } = useAuthContext();
-  const isLogged = Boolean(user);
   return (
     <Tabs
       screenOptions={{
@@ -24,13 +18,14 @@ const Layout = () => {
           height: 52,
           overflow: "hidden",
           borderWidth: 1,
+
         },
         tabBarItemStyle: {
           width: "100%",
           height: "100%",
           justifyContent: "center",
-          alignContent: "center"
-        }
+          alignContent: "center",
+        },
       }}>
 
       <Tabs.Screen
@@ -54,52 +49,21 @@ const Layout = () => {
         options={{
           title: "Profile",
           headerShown: false,
-          tabBarIcon: ({ color, focused }) => <TabIcon color={color} icon={User} focused={focused} title="Profile" />,
-          href: isLogged ? "/profile" : null
+          tabBarIcon: ({ color, focused }) => <TabIcon color={color} icon={User} focused={focused} />,
         }}
       />
       <Tabs.Screen
-        name='login'
+        name='lecture-detail/[id]'
         options={{
-          title: "Login",
+          title: "Lecture Detail",
           headerShown: false,
-          tabBarIcon: ({ color, focused }) => <TabIcon color={color} icon={User} focused={focused} title="Login" />,
-          href: isLogged ? null : "/login"
+          tabBarIcon: ({ color, focused }) => <TabIcon color={color} icon={User} focused={focused} />,
+          href: null
         }}
-      />
-      <Tabs.Screen
-        name='register'
-        options={{
-          title: "Register",
-          // tabBarIcon: ({ color }) => <Icon as={User} className='m-2 size-4' color={color} />,
-          headerShown: false,
-          tabBarIcon: ({ color, focused }) => <TabIcon color={color} icon={User} focused={focused} title="Register" />,
-          href: null,
-        }}
-
       />
 
     </Tabs>
   );
-}
-
-const TabIcon = ({ icon, focused, title, color }: { icon: any, focused: boolean, title?: string, color: string }) => {
-  if (focused) {
-    return (
-      <Box className='flex flex-row w-full flex-1 min-w-[112px] min-h-16 mt-4 justify-center items-center rounded-full overflow-hidden'>
-        <Icon as={icon} className='m-2' size="xl" color={color} />
-        {title && (
-          <Text className='text-typography-950 text-base font-semibold ml-2'>{title}</Text>
-        )}
-      </Box>
-    )
-  }
-
-  return (
-    <View className='size-full justify-center items-center mt-4 rounded-full'>
-      <Icon as={icon} className='m-2 size-4' color={color} />
-    </View>
-  )
 }
 
 export default Layout;

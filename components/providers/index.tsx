@@ -5,13 +5,25 @@ import { CustomLightTheme } from '@/utilities/themeOptions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DarkTheme, ThemeProvider } from '@react-navigation/native';
 import {
+  MutationCache,
   QueryClient,
   QueryClientProvider
 } from '@tanstack/react-query';
 import { useColorScheme } from "nativewind";
 import { PropsWithChildren, useEffect } from 'react';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 2 * 60 * 1000 // 2 minutes
+    }
+  },
+  mutationCache: new MutationCache({
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    }
+  })
+});
 
 const Providers = ({ children }: PropsWithChildren) => {
   const { colorScheme, setColorScheme } = useColorScheme();
@@ -27,7 +39,7 @@ const Providers = ({ children }: PropsWithChildren) => {
     }
 
     setThemeFromStorage();
-  }, [colorScheme]);
+  }, [colorScheme, setColorScheme]);
 
   return (
     <ThemeProvider value={colorScheme === "light" ? CustomLightTheme : DarkTheme}>
