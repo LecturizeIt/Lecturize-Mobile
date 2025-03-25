@@ -5,7 +5,7 @@ import { Heading } from '@/components/ui/heading';
 import { useAuthContext } from '@/contexts/auth-context';
 import { useRouter } from 'expo-router';
 
-const Settings = () => {
+const SettingsPage = () => {
   const { logout, user } = useAuthContext();
   const router = useRouter();
 
@@ -23,4 +23,4 @@ const Settings = () => {
   );
 }
 
-export default Settings;
+export default SettingsPage;

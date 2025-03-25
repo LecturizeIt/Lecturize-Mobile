@@ -4,9 +4,8 @@ import { Icon } from '@/components/ui/icon';
 import "@/global.css";
 import { Drawer } from 'expo-router/drawer';
 import { StatusBar } from "expo-status-bar";
-import { House, KeyRound, Settings } from 'lucide-react-native';
+import { BookOpenText, KeyRound, Settings } from 'lucide-react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-
 
 export default function RootLayout() {
   return (
@@ -16,14 +15,15 @@ export default function RootLayout() {
         <Drawer screenOptions={{
           drawerStyle: { maxWidth: "70%" },
           swipeEnabled: false,
-          header: (props) => <CustomHeader {...props} />
+          header: (props) => <CustomHeader {...props} />,
+
         }}>
           <Drawer.Screen
             name="(tabs)"
             options={{
               drawerLabel: 'Home',
-              title: "Home",
-              drawerIcon: ({ color }) => <Icon as={House} color={color} />
+              title: "Lectures",
+              drawerIcon: ({ color }) => <Icon as={BookOpenText} color={color} />
             }}
           />
           <Drawer.Screen
@@ -31,7 +31,7 @@ export default function RootLayout() {
             options={{
               drawerLabel: 'Autenticação',
               title: 'Autenticação',
-              drawerIcon: ({ color }) => <Icon as={KeyRound} color={color} />
+              drawerIcon: ({ color }) => <Icon as={KeyRound} color={color} />,
             }}
           />
           <Drawer.Screen
@@ -42,6 +42,7 @@ export default function RootLayout() {
               drawerIcon: ({ color }) => <Icon as={Settings} color={color} />
             }}
           />
+
         </Drawer>
       </GestureHandlerRootView>
     </Providers>

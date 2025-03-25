@@ -1,6 +1,6 @@
 import TabIcon from "@/components/tab-icon";
-import { Tabs } from 'expo-router';
-import { BookOpenText, Home, User } from "lucide-react-native";
+import { Tabs, useRouter } from 'expo-router';
+import { BookOpenText, PlusCircle, User } from "lucide-react-native";
 
 const ACCENT_PURPLE = "#962dff";
 
@@ -31,17 +31,17 @@ const Layout = () => {
       <Tabs.Screen
         name='index'
         options={{
-          title: "Home",
+          title: "Lectures",
           headerShown: false,
-          tabBarIcon: ({ color, focused }) => <TabIcon color={color} icon={Home} focused={focused} title="Home" />,
+          tabBarIcon: ({ color, focused }) => <TabIcon color={color} icon={BookOpenText} focused={focused} title="Lectures" />,
         }}
       />
       <Tabs.Screen
-        name='lectures'
+        name='create-lecture'
         options={{
-          title: "Lectures",
+          title: "Create Lecture",
           headerShown: false,
-          tabBarIcon: ({ color, focused }) => <TabIcon color={color} icon={BookOpenText} focused={focused} />,
+          tabBarIcon: ({ color, focused }) => <TabIcon color={color} icon={PlusCircle} focused={focused} />,
         }}
       />
       <Tabs.Screen
@@ -49,19 +49,18 @@ const Layout = () => {
         options={{
           title: "Profile",
           headerShown: false,
-          tabBarIcon: ({ color, focused }) => <TabIcon color={color} icon={User} focused={focused} />,
+          tabBarIcon: ({ color, focused }) => <TabIcon color={color} icon={User} focused={focused} title="Profile" />,
         }}
       />
       <Tabs.Screen
-        name='lecture-detail/[id]'
+        name='lecture'
         options={{
-          title: "Lecture Detail",
+          title: "Profile",
           headerShown: false,
-          tabBarIcon: ({ color, focused }) => <TabIcon color={color} icon={User} focused={focused} />,
+          tabBarIcon: ({ color, focused }) => <TabIcon color={color} icon={User} focused={focused} title="Profile" />,
           href: null
         }}
       />
-
     </Tabs>
   );
 }

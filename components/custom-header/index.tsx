@@ -19,7 +19,7 @@ const CustomHeader = ({ navigation, route, options }: DrawerHeaderProps) => {
         <HeaderTitle style={{ position: "relative", top: 3, left: 10 }}>
           {title}
         </HeaderTitle>
-        <HeaderButton onPress={() => router.replace("/")}>
+        <HeaderButton onPress={() => router.push("/")}>
           <Image
             source={Logo}
             style={{ width: "100%", maxWidth: 50, height: 40, position: "relative", top: 5 }}

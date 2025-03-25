@@ -3,8 +3,7 @@ import { Box } from '@/components/ui/box';
 import { Button, ButtonText } from '@/components/ui/button';
 import { Link } from 'expo-router';
 
-const Login = () => {
-
+const LoginPage = () => {
   return (
     <Box className='flex-1 items-center justify-center p-[3rem]'>
       <LoginForm />
@@ -17,4 +16,4 @@ const Login = () => {
   );
 }
 
-export default Login;
+export default LoginPage;
