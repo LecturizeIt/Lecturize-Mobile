@@ -1,11 +1,19 @@
+import LectureForm from "@/components/lecture-form";
 import { Box } from "@/components/ui/box";
-import { Text } from "@/components/ui/text";
+import { Heading } from "@/components/ui/heading";
+import { ScrollView } from "react-native";
 
 const CreateLecturePage = () => {
   return (
-    <Box className='flex-1 justify-center items-center'>
-      <Text className='text-typography-950'>CreateLecture</Text>
-    </Box>
+    <ScrollView
+      className="flex flex-1 w-full"
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ alignItems: "center", minHeight: "100%", paddingBottom: 10, paddingTop: 32 }}
+    >
+      <Box className='flex-1 items-center mt-[5rem] px-[2rem] w-full'>
+        <LectureForm />
+      </Box>
+    </ScrollView>
   );
 }
 

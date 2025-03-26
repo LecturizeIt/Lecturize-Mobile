@@ -1,9 +1,10 @@
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
-import { fetchLecture, fetchLectures } from "../apis/lectures-api";
+import { useQuery } from "@tanstack/react-query";
+import { fetchLecture, fetchLectures, fetchTags } from "../apis/lectures-api";
 
-export const useLecturesQuery = () => useSuspenseQuery({
+export const useLecturesQuery = () => useQuery({
   queryFn: fetchLectures,
   queryKey: ["lecture", "list"],
+  // throwOnError: (error) => isAxiosError(error) ? error.response?.status === 500 : false
 });
 
 export const useLectureDetailQuery = (id: string) => {
@@ -12,3 +13,8 @@ export const useLectureDetailQuery = (id: string) => {
     queryKey: ["lecture", "detail", id],
   });
 }
+
+export const useTagsQuery = () => useQuery({
+  queryFn: fetchTags,
+  queryKey: ["tags", "list"],
+});

@@ -1,10 +1,21 @@
 import { useLecturesQuery } from "@/lib/queries/lecture-queries";
 import { FlatList } from "react-native";
+import ErrorMessage from "../error-fallback/error-message";
 import NoLecturesFound from "../no-lectures-found";
+import SuspenseLoading from "../suspense-loading";
 import LectureCard from "./lecture-card";
 
 const LecturesList = () => {
-  const { data: lectures, isLoading, isError } = useLecturesQuery();
+  const { data: lectures, isLoading, isError, isFetching, error } = useLecturesQuery();
+
+  if (isLoading && !isError) {
+    return <SuspenseLoading />
+  }
+
+  if (isError && !isFetching) {
+    return <ErrorMessage error={error} />
+  }
+
   return (
     <>
       <FlatList

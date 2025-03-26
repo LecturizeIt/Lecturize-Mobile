@@ -1,4 +1,4 @@
-import { Button, ButtonText } from '@/components/ui/button';
+import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
 import { FormControl, FormControlError, FormControlErrorIcon, FormControlErrorText } from '@/components/ui/form-control';
 import { Heading } from '@/components/ui/heading';
 import { EyeIcon, EyeOffIcon } from "@/components/ui/icon";
@@ -13,6 +13,7 @@ import { isAxiosError } from 'axios';
 import { AlertCircle, Mail } from 'lucide-react-native';
 import { useState } from 'react';
 import { Controller, useForm } from "react-hook-form";
+import colors from "tailwindcss/colors";
 import Logo from "../../assets/images/logo.png";
 
 
@@ -41,10 +42,10 @@ const LoginForm = () => {
   const onSubmit = (data: LoginFormValues) => {
     loginMutation.mutate(data, {
       onError: (error) => {
-        if (isAxiosError(error)) {
+        if (isAxiosError(error) && error.response) {
           const serverError = error.response?.data;
           form.setError("root", { message: serverError.detail });
-        }
+        } else form.setError("root", {message: error.message})
       }
     });
   };
@@ -118,11 +119,15 @@ const LoginForm = () => {
 
         </VStack>
         <Button
-          className="mx-auto w-full max-w-[100px]"
+          className="mx-auto w-full max-w-[100px] items-center justify-center"
           onPress={handleSubmit(onSubmit)}
           isDisabled={loginMutation.isPending}
         >
-          <ButtonText className="text-typography-0">Entrar</ButtonText>
+          {loginMutation.isPending ? (
+            <ButtonSpinner color={colors.purple[500]} />
+          ) : (
+            <ButtonText className="text-typography-0">Entrar</ButtonText>
+          )}
         </Button>
       </VStack>
     </FormControl>
