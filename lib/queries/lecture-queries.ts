@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchLecture, fetchLectures } from "../apis/lectures-api";
+import { fetchLecture, fetchLectures, fetchTags } from "../apis/lectures-api";
 
 export const useLecturesQuery = () => useQuery({
   queryFn: fetchLectures,
@@ -13,3 +13,8 @@ export const useLectureDetailQuery = (id: string) => {
     queryKey: ["lecture", "detail", id],
   });
 }
+
+export const useTagsQuery = () => useQuery({
+  queryFn: fetchTags,
+  queryKey: ["tags", "list"],
+});
