@@ -1,5 +1,5 @@
 import TabIcon from "@/components/tab-icon";
-import { Tabs, useRouter } from 'expo-router';
+import { Tabs } from 'expo-router';
 import { BookOpenText, PlusCircle, User } from "lucide-react-native";
 
 const ACCENT_PURPLE = "#962dff";

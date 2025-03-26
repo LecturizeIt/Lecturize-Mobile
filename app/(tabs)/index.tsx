@@ -1,11 +1,14 @@
 import LecturesList from "@/components/lectures-list";
 import SuspenseLoading from "@/components/suspense-loading";
+import { Box } from "@/components/ui/box";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { Link } from "expo-router";
 import { Suspense } from "react";
+import ErrorBoundary from 'react-native-error-boundary';
 import { ScrollView } from "react-native";
+
 
 const LecturesPage = () => {
   return (
@@ -27,11 +30,29 @@ const LecturesPage = () => {
         </Button>
       </Link>
 
-      <Suspense fallback={<SuspenseLoading />}>
+      {/* <ErrorBoundary >
+
+      </ErrorBoundary> */}
+      {/* <Suspense fallback={<SuspenseLoading />}> */}
         <LecturesList />
-      </Suspense>
+      {/* </Suspense> */}
+
     </ScrollView>
   )
 }
+
+// const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
+//   return (
+//     <Box className="flex-1 justify-center items-center">
+//       <Heading className="text-typography-950" size="2xl">Error...</Heading>
+//       <Text>{error.message}</Text>
+//       <Button variant="link" onPress={resetErrorBoundary}>
+//         <ButtonText>
+//           Try again
+//         </ButtonText>
+//       </Button>
+//     </Box>
+//   )
+// }
 
 export default LecturesPage;

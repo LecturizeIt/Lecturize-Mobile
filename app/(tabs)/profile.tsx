@@ -4,9 +4,7 @@ import { Link } from 'expo-router';
 import { Text, View } from 'react-native';
 
 const ProfilePage = () => {
-  const { isAuthenticated, isLoading } = useAuthContext();
-
-  console.log(isLoading);
+  const { isAuthenticated } = useAuthContext();
 
   if (!isAuthenticated) {
     return (

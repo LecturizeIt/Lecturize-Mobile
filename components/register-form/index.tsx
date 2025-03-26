@@ -1,4 +1,4 @@
-import { Button, ButtonText } from '@/components/ui/button';
+import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
 import { FormControl, FormControlError, FormControlErrorIcon, FormControlErrorText } from '@/components/ui/form-control';
 import { Heading } from '@/components/ui/heading';
 import { EyeIcon, EyeOffIcon } from "@/components/ui/icon";
@@ -14,6 +14,7 @@ import { AlertCircle, CircleUserRound, Mail } from 'lucide-react-native';
 import { useState } from "react";
 import { Controller, useForm } from 'react-hook-form';
 import Logo from "../../assets/images/logo.png";
+import colors from 'tailwindcss/colors';
 
 const defaultValues: RegisterFormValues = {
   username: "tigas",
@@ -39,8 +40,7 @@ const RegisterForm = () => {
   const onSubmit = (data: RegisterFormValues) => {
     registerMutation.mutate(data, {
       onError(error) {
-        if (isAxiosError(error)) {
-          console.log(error);
+        if (isAxiosError(error) && error.response) {
           const serverError = error.response?.data;
           form.setError("root", { message: serverError.detail });
 
@@ -51,7 +51,7 @@ const RegisterForm = () => {
           if (serverError.errors.username) {
             form.setError("username", { message: serverError.errors.username })
           }
-        }
+        } else form.setError("root", {message: error.message})
       },
     })
   }
@@ -182,9 +182,14 @@ const RegisterForm = () => {
           <Button
             className="mx-auto w-full max-w-[100px]"
             onPress={handleSubmit(onSubmit)}
-          // isDisabled={register.isPending}
+            isDisabled={registerMutation.isPending}
           >
-            <ButtonText className="text-typography-0">Registrar</ButtonText>
+            {registerMutation.isPending ? (
+              <ButtonSpinner color={colors.purple[500]} />
+            ) : (
+              <ButtonText className="text-typography-0">Entrar</ButtonText>
+            )}
+            
           </Button>
         </VStack>
       </FormControl>
