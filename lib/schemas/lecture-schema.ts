@@ -1,7 +1,8 @@
+import { ACCEPTED_MIME_TYPES } from "@/constants";
 import { isAfter } from "date-fns";
 import { z } from "zod";
 
-const ACCEPTED_MIME_TYPES = ["image/png", "image/jpeg", "image/webp"];
+
 const MB_BYTES = 1_000_000;
 
 const TypeEnum = z.enum(['PRESENTIAL', 'HYBRID', 'ONLINE']);
@@ -35,10 +36,11 @@ export const lectureSchema = z.object({
     }),
   })).optional(),
 
-  image: z.instanceof(File).optional().superRefine((file, ctx) => {
+  image: z.any().optional()
+  .superRefine((file, ctx) => {
     if (!file) return;
 
-    if (!ACCEPTED_MIME_TYPES.includes(file.type)) {
+    if (!ACCEPTED_MIME_TYPES.includes(file.mimeType)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: `Image must be one of [${ACCEPTED_MIME_TYPES.join(", ")}] accepted types, but it was ${file.type}`,
@@ -51,33 +53,33 @@ export const lectureSchema = z.object({
         message: `Image size must not be larger than ${MB_BYTES / MB_BYTES} MB`,
       });
     }
+  }),
+})
+  .refine(data => new Date(data.endsAt) > new Date(data.startsAt), {
+    message: "End date and time must be after the start date and time",
+    path: ["endsAt"],
+  }).superRefine((val, ctx) => {
+    if (val.type === "HYBRID") {
+      const issues: z.IssueData[] = validateHybridType(val.url, val.address, val.maximumCapacity);
+      issues.forEach((issue) => ctx.addIssue(issue))
+    }
+
+    if (val.type === "ONLINE") {
+      val.maximumCapacity = undefined;
+      val.address = undefined;
+      const issues: z.IssueData[] = [];
+      validateOnlineType(val.url, issues);
+      issues.forEach((issue) => ctx.addIssue(issue))
+    }
+
+    if (val.type === "PRESENTIAL") {
+      val.url = undefined;
+      const issues: z.IssueData[] = [];
+      validatePresentialType(val.address, issues, val.maximumCapacity);
+      issues.forEach((issue) => ctx.addIssue(issue))
+    }
+
   })
-})
-.refine(data => new Date(data.endsAt) > new Date(data.startsAt), {
-  message: "End date and time must be after the start date and time",
-  path: ["endsAt"],
-}).superRefine((val, ctx) => {
-  if (val.type === "HYBRID") {
-    const issues: z.IssueData[] = validateHybridType(val.url, val.address, val.maximumCapacity);
-    issues.forEach((issue) => ctx.addIssue(issue))
-  }
-
-  if (val.type === "ONLINE") {
-    val.maximumCapacity = undefined;
-    val.address = undefined;
-    const issues: z.IssueData[] = [];
-    validateOnlineType(val.url, issues);
-    issues.forEach((issue) => ctx.addIssue(issue))
-  }
-
-  if (val.type === "PRESENTIAL") {
-    val.url = undefined;
-    const issues: z.IssueData[] = [];
-    validatePresentialType(val.address, issues, val.maximumCapacity);
-    issues.forEach((issue) => ctx.addIssue(issue))
-  }
-
-})
 
 function validateOnlineType(url: string | undefined, issues: z.IssueData[]) {
   if (url === "") {
@@ -107,7 +109,7 @@ function validatePresentialType(address: string | undefined, issues: z.IssueData
 }
 
 
-function validateHybridType(url?: string, address?: string, maximumCapacity?: number ) {
+function validateHybridType(url?: string, address?: string, maximumCapacity?: number) {
   const issues: z.IssueData[] = [];
   validateOnlineType(url, issues);
   validatePresentialType(address, issues, maximumCapacity);

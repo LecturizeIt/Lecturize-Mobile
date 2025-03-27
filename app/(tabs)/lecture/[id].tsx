@@ -2,14 +2,17 @@ import Logo from "@/assets/images/logo.png";
 import LectureInformation from "@/components/lecture-detail";
 import { Card } from "@/components/ui/card";
 import useBase64Image from "@/hooks/use-base64-image";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useSegments } from "expo-router";
 import { Image, ScrollView } from "react-native";
 
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
 const LectureDetailPage = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const image = useBase64Image(`${BASE_URL}/lectures/${id}/image`)
+  const image = useBase64Image(`${BASE_URL}/lectures/${id}/image`);
+  const segments = useSegments();
+
+  console.log(segments);
 
   return (
     <ScrollView

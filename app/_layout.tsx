@@ -11,7 +11,6 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function RootLayout() {
   return (
-
     <Providers>
       <GestureHandlerRootView className='flex-1'>
         <ErrorBoundary FallbackComponent={ErrorFallback}>

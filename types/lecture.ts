@@ -5,3 +5,5 @@ export type Lecture = Required<components["schemas"]["LectureDTO"]>;
 export type Tag = Required<components["schemas"]["CategoryTag"]>;
 
 export type Metrics = Required<components["schemas"]["LectureMetricsDTO"]>;
+
+export type LectureImageResponse = Required<components["schemas"]["LectureImageDTO"]>;

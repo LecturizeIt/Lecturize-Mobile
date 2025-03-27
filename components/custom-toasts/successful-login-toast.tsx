@@ -2,11 +2,9 @@ import {
   Toast,
   ToastTitle
 } from "@/components/ui/toast";
-import { useAuthContext } from "@/contexts/auth-context";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const SuccessfulLoginToast = () => {
-  const { user } = useAuthContext();
+const SuccessToast = ({ message="Success!" }: { message?: string }) => {
   return (
     <SafeAreaView>
       <Toast
@@ -15,11 +13,11 @@ const SuccessfulLoginToast = () => {
         action="success"
       >
         <ToastTitle>
-          {`Bem vindo, ${user?.username}!`}
+          {message}
         </ToastTitle>
       </Toast>
     </SafeAreaView>
   )
 }
 
-export default SuccessfulLoginToast;
+export default SuccessToast;

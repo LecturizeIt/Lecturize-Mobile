@@ -4,7 +4,6 @@ import { fetchLecture, fetchLectures, fetchTags } from "../apis/lectures-api";
 export const useLecturesQuery = () => useQuery({
   queryFn: fetchLectures,
   queryKey: ["lecture", "list"],
-  // throwOnError: (error) => isAxiosError(error) ? error.response?.status === 500 : false
 });
 
 export const useLectureDetailQuery = (id: string) => {

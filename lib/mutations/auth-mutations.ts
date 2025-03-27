@@ -1,5 +1,5 @@
 import { useAuthContext } from "@/contexts/auth-context";
-import useLoginToast from "@/hooks/use-custom-toast";
+import useCustomToast from "@/hooks/use-custom-toast";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { login, register } from "@/lib/apis/auth-api";
@@ -7,7 +7,7 @@ import { login, register } from "@/lib/apis/auth-api";
 export const useLoginMutation = () => {
   const router = useRouter();
   const { login: loginUser } = useAuthContext();
-  const { showSuccessfulLoginToast } = useLoginToast();
+  const { showSuccessToast } = useCustomToast();
 
   return useMutation({
     mutationFn: login,
@@ -15,8 +15,8 @@ export const useLoginMutation = () => {
       console.log(err);
     },
     onSuccess: async (data) => {
-      await loginUser(data.accessToken!);
-      showSuccessfulLoginToast();
+      const user = await loginUser(data.accessToken!);
+      showSuccessToast(`Bem vindo, ${user.username}`);
       router.replace("/");
     }
   });

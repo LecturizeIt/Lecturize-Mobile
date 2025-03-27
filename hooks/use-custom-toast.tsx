@@ -1,25 +1,25 @@
 import ErrorToast from "@/components/custom-toasts/error-toast";
-import SuccessfulLoginToast from "@/components/custom-toasts/successful-login-toast";
+import SuccessToast from "@/components/custom-toasts/successful-login-toast";
 import { useToast } from "@/components/ui/toast";
 
 const useCustomToast = () => {
   const toast = useToast();
 
-  const showSuccessfulLoginToast = () => {
+  const showSuccessToast = (message: string) => {
     toast.show({
       placement: "top",
-      render: () => <SuccessfulLoginToast />
+      render: () => <SuccessToast message={message} />
     })
   }
 
-  const showErrorToast = () => {
+  const showErrorToast = (message: string) => {
     toast.show({
       placement: "top",
-      render: () => <ErrorToast />
-    })
+      render: () => <ErrorToast message={message} />
+    });
   }
 
-  return { showSuccessfulLoginToast, showErrorToast }
+  return { showSuccessToast, showErrorToast }
 }
 
 export default useCustomToast;

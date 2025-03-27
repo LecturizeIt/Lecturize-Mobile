@@ -1,7 +1,7 @@
 import { LectureFormValues } from "@/lib/schemas/lecture-schema";
 import { Controller, UseFormReturn } from "react-hook-form";
-import { Input, InputField } from "../ui/input";
-import { Text } from "../ui/text";
+import { Input, InputField } from "../../ui/input";
+import { Text } from "../../ui/text";
 
 const AddressInput = ({ form: { control, formState: { errors } } }: { form: UseFormReturn<LectureFormValues> }) => {
   return (
