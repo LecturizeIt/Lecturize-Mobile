@@ -11,9 +11,9 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { LectureFormValues } from "@/lib/schemas/lecture-schema";
-import { Controller, UseFormReturn } from "react-hook-form";
-import { Text } from "../ui/text";
 import { ChevronDown } from "lucide-react-native";
+import { Controller, UseFormReturn } from "react-hook-form";
+import { Text } from "../../ui/text";
 
 const TypeSelectInput = ({ form: { control, formState: { errors } } }: { form: UseFormReturn<LectureFormValues> }) => {
   return (

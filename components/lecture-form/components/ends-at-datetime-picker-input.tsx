@@ -1,17 +1,17 @@
 import { Button, ButtonText } from '@/components/ui/button';
 import { Input, InputField } from '@/components/ui/input';
-import { TOMORROW } from '@/constants';
+import { DATE_NOW_PLUS_TIRTHY } from '@/constants';
 import { LectureFormValues } from '@/lib/schemas/lecture-schema';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { useState } from 'react';
 import { Controller, UseFormReturn } from "react-hook-form";
 import { Platform } from 'react-native';
-import { HStack } from "../ui/hstack";
-import { Text } from "../ui/text";
+import { HStack } from "../../ui/hstack";
+import { Text } from "../../ui/text";
 
 const EndsAtDatetimePickerInput = ({ form: { control, formState: { errors }, setValue } }: { form: UseFormReturn<LectureFormValues> }) => {
   const [mode, setMode] = useState<"date" | "time">("date");
-  const [endsAt, setEndsAt] = useState(TOMORROW);
+  const [endsAt, setEndsAt] = useState(DATE_NOW_PLUS_TIRTHY);
   const [showEndsAtPicker, setShowEndsAtPicker] = useState(false);
 
   const toggleEndsAtPicker = () => {

@@ -1,6 +1,6 @@
 import TabIcon from "@/components/tab-icon";
 import { Tabs } from 'expo-router';
-import { BookOpenText, PlusCircle, User } from "lucide-react-native";
+import { BookOpenText, PlusCircle, Shield, ShieldAlert, User } from "lucide-react-native";
 
 const ACCENT_PURPLE = "#962dff";
 
@@ -61,6 +61,24 @@ const Layout = () => {
           href: null
         }}
       />
+
+      <Tabs.Screen
+        name="(protected)"
+        options={{
+          title: "P1",
+          headerShown: false,
+          tabBarIcon: ({ color, focused }) => <TabIcon color={color} icon={ShieldAlert} focused={focused} title="P1" />,
+        }}
+      />
+
+      {/* <Tabs.Screen
+        name="(protected)/protected2"
+        options={{
+          title: "P2",
+          headerShown: false,
+          tabBarIcon: ({ color, focused }) => <TabIcon color={color} icon={ShieldAlert} focused={focused} title="P2" />,
+        }}
+      /> */}
     </Tabs>
   );
 }

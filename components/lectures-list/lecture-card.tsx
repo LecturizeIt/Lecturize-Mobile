@@ -7,7 +7,7 @@ import { Lecture as LectureType } from "@/types/lecture";
 import { formatDate } from "@/utilities/utils";
 import { Link } from "expo-router";
 import { ArrowRight } from "lucide-react-native";
-import { Image } from "react-native";
+import { Image, Pressable } from "react-native";
 import { HStack } from "../ui/hstack";
 import { Icon } from "../ui/icon";
 
@@ -18,11 +18,13 @@ const LectureCard = ({ lecture }: { lecture: LectureType }) => {
   return (
     <>
       <Card size="md" variant="elevated" className="m-3 pb-[1rem] shadow-2xl" key={lecture.id}>
-        <Image
-          source={image ? { uri: image }: Logo}
-          className="w-full h-[200px]"
-          resizeMode="contain"
-        />
+        <Link href={{ pathname: "/lecture/[id]", params: { id: lecture.id } }} className="w-full">
+          <Image
+            source={image ? { uri: image } : Logo}
+            className="w-full h-[200px]"
+            resizeMode="contain"
+          />
+        </Link>
         <Text className="text-sm font-normal mb-2 mt-4 text-typography-700">
           {formatDate(lecture.createdAt)}
         </Text>

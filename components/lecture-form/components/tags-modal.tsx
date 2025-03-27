@@ -12,20 +12,23 @@ import {
 import { useTagsQuery } from "@/lib/queries/lecture-queries";
 import { Tag } from "@/types/lecture";
 import { Search } from "lucide-react-native";
-import { useState } from "react";
-import ErrorMessage from "../error-fallback/error-message";
-import SuspenseLoading from "../suspense-loading";
-import { Box } from "../ui/box";
-import { Center } from "../ui/center";
-import { Input, InputField, InputIcon, InputSlot } from "../ui/input";
-import { Text } from "../ui/text";
+import { useEffect, useState } from "react";
+import ErrorMessage from "../../error-fallback/error-message";
+import SuspenseLoading from "../../suspense-loading";
+import { Box } from "../../ui/box";
+import { Center } from "../../ui/center";
+import { Input, InputField, InputIcon, InputSlot } from "../../ui/input";
+import { Text } from "../../ui/text";
+import { LectureFormValues } from "@/lib/schemas/lecture-schema";
+import { UseFormReturn } from "react-hook-form";
 
 type TagsModalProps = {
   selectedTags: Tag[],
-  setSelectedTags: React.Dispatch<React.SetStateAction<Tag[]>>
+  setSelectedTags: React.Dispatch<React.SetStateAction<Tag[]>>,
+  form: UseFormReturn<LectureFormValues>,
 }
 
-const TagsModal = ({ selectedTags, setSelectedTags }: TagsModalProps) => {
+const TagsModal = ({ selectedTags, setSelectedTags, form: { control, formState: { errors }, setValue } }: TagsModalProps) => {
   const [showModal, setShowModal] = useState(false);
   const { data, error, isLoading, isError, isFetching } = useTagsQuery();
   const [search, setSearch] = useState<string>("");
@@ -40,10 +43,14 @@ const TagsModal = ({ selectedTags, setSelectedTags }: TagsModalProps) => {
     setSelectedTags(prev => [...prev, tag]);
   }
 
+  useEffect(() => {
+    setValue("tags", selectedTags);
+  }, [selectedTags, setValue]);
+
   return (
     <>
       <Text className="text-typography-900" size="sm">Categorias</Text>
-      <Button onPress={() => setShowModal(true)}>
+      <Button variant="outline" onPress={() => setShowModal(true)}>
         <ButtonText>Categorias</ButtonText>
       </Button>
       <Modal

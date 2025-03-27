@@ -1,10 +1,13 @@
 import { Button, ButtonText } from '@/components/ui/button';
 import { useAuthContext } from '@/contexts/auth-context';
-import { Link } from 'expo-router';
+import { Link, useSegments } from 'expo-router';
 import { Text, View } from 'react-native';
 
 const ProfilePage = () => {
   const { isAuthenticated } = useAuthContext();
+  const segments = useSegments();
+
+  console.log(segments)
 
   if (!isAuthenticated) {
     return (

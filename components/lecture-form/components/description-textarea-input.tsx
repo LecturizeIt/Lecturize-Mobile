@@ -1,7 +1,7 @@
 import { LectureFormValues } from "@/lib/schemas/lecture-schema";
 import { Controller, UseFormReturn } from "react-hook-form";
-import { Textarea, TextareaInput } from "../ui/textarea";
-import { Text } from "../ui/text";
+import { Text } from "../../ui/text";
+import { Textarea, TextareaInput } from "../../ui/textarea";
 
 const DescriptionTextareaInput = ({ form: { control, formState: { errors } } }: { form: UseFormReturn<LectureFormValues> }) => {
   return (

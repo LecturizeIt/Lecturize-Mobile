@@ -27,7 +27,6 @@ const LectureInformation = ({ id }: { id: string }) => {
       <Text>Palestra termina às {formatDate(lecture?.endsAt!)}</Text>
       <Text>{lecture?.type}</Text>
       <Text>{lecture?.status}</Text>
-      <Text>{lecture?.type}</Text>
       <LectureTags tags={lecture?.tags!} />
       <Text>Organizer: {lecture?.organizer.username}</Text>
       <Text>Vezes compartilhada: {lecture?.metrics.timesShared}</Text>
