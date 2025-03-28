@@ -21,6 +21,8 @@ import { Input, InputField, InputIcon, InputSlot } from "../../ui/input";
 import { Text } from "../../ui/text";
 import { LectureFormValues } from "@/lib/schemas/lecture-schema";
 import { UseFormReturn } from "react-hook-form";
+import TagBadge from "@/components/tag-badge";
+import { HStack } from "@/components/ui/hstack";
 
 type TagsModalProps = {
   selectedTags: Tag[],
@@ -50,8 +52,15 @@ const TagsModal = ({ selectedTags, setSelectedTags, form: { control, formState: 
   return (
     <>
       <Text className="text-typography-900" size="sm">Categorias</Text>
+      {selectedTags.length ? (
+        <HStack className="flex-wrap gap-3">
+          {selectedTags.map(({ name, id }) => (
+            <TagBadge key={id} name={name} />
+          ))}
+        </HStack>
+      ) : null}
       <Button variant="outline" onPress={() => setShowModal(true)}>
-        <ButtonText>Categorias</ButtonText>
+        <ButtonText>Selecionar categorias</ButtonText>
       </Button>
       <Modal
         isOpen={showModal}

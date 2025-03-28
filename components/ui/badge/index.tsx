@@ -22,6 +22,7 @@ const badgeStyle = tva({
       success: 'bg-background-success border-success-300',
       info: 'bg-background-info border-info-300',
       muted: 'bg-background-muted border-background-300',
+      accent: "bg-background-50 border border-accent",
     },
     variant: {
       solid: '',
@@ -45,6 +46,7 @@ const badgeTextStyle = tva({
       success: 'text-success-600',
       info: 'text-info-600',
       muted: 'text-background-800',
+      accent: "color-accent"
     },
     size: {
       sm: 'text-2xs',
@@ -86,6 +88,7 @@ const badgeIconStyle = tva({
       success: 'text-success-600',
       info: 'text-info-600',
       muted: 'text-background-800',
+      accent: "color-accent"
     },
     size: {
       sm: 'h-3 w-3',

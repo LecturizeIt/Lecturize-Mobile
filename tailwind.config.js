@@ -14,6 +14,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        accent: "var(--color-accent)",
+        custom: { white: "rgb(var(--color-custom-white)/<alpha-value>)" },
         primary: {
           0: 'rgb(var(--color-primary-0)/<alpha-value>)',
           50: 'rgb(var(--color-primary-50)/<alpha-value>)',
@@ -162,6 +164,7 @@ module.exports = {
           info: 'rgb(var(--color-background-info)/<alpha-value>)',
           light: '#FBFBFB',
           dark: '#181719',
+
         },
         indicator: {
           primary: 'rgb(var(--color-indicator-primary)/<alpha-value>)',

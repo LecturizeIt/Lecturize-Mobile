@@ -3,6 +3,7 @@ import ErrorFallback from '@/components/error-fallback';
 import Providers from '@/components/providers';
 import { Icon } from '@/components/ui/icon';
 import "@/global.css";
+import { useRouter } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
 import { StatusBar } from "expo-status-bar";
 import { BookOpenText, KeyRound, Settings } from 'lucide-react-native';
@@ -10,6 +11,8 @@ import { ErrorBoundary } from "react-error-boundary";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function RootLayout() {
+  const router = useRouter();
+
   return (
     <Providers>
       <GestureHandlerRootView className='flex-1'>
@@ -19,7 +22,6 @@ export default function RootLayout() {
             drawerStyle: { maxWidth: "70%" },
             swipeEnabled: false,
             header: (props) => <CustomHeader {...props} />,
-
           }}>
             <Drawer.Screen
               name="(tabs)"
@@ -28,6 +30,12 @@ export default function RootLayout() {
                 title: "Lectures",
                 drawerIcon: ({ color }) => <Icon as={BookOpenText} color={color} />
               }}
+              listeners={() => ({
+                drawerItemPress: (props) => {
+                  props.preventDefault();
+                  router.push("/");
+                }
+              })}
             />
             <Drawer.Screen
               name="(auth)"
@@ -45,7 +53,6 @@ export default function RootLayout() {
                 drawerIcon: ({ color }) => <Icon as={Settings} color={color} />
               }}
             />
-
           </Drawer>
         </ErrorBoundary >
       </GestureHandlerRootView>

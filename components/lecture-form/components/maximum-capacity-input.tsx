@@ -1,5 +1,4 @@
 import { LectureFormValues } from "@/lib/schemas/lecture-schema";
-import { Lecture } from "@/types/lecture";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { Input, InputField } from "../../ui/input";
 import { Text } from "../../ui/text";

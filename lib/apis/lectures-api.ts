@@ -27,8 +27,6 @@ export const putLectureImage = async (file: DocumentPickerAsset, id: string): Pr
   const accessToken = await AsyncStorage.getItem("accessToken");
   const formData = new FormData();
 
-  // formData.append("file", file);
-
   //@ts-expect-error
   formData.append("file", {
     uri: file.uri,

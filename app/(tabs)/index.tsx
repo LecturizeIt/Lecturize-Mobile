@@ -5,8 +5,8 @@ import { Text } from "@/components/ui/text";
 import { Link } from "expo-router";
 import { ScrollView } from "react-native";
 
-
 const LecturesPage = () => {
+
   return (
     <ScrollView
       className="flex flex-1 px-5 w-full"
@@ -21,13 +21,11 @@ const LecturesPage = () => {
       </Text>
 
       <Link href="/create-lecture" asChild>
-        <Button className="w-full max-w-[150px] mt-[1.5rem] bg-purple-500 border border-purple-500 data-[active=true]:bg-transparent">
-          <ButtonText style={{color: "#fff"}}>Comece agora!</ButtonText>
+        <Button className="w-full max-w-[150px] mt-[1.5rem]" action="accent">
+          <ButtonText>Comece agora!</ButtonText>
         </Button>
       </Link>
-
       <LecturesList />
-
     </ScrollView >
   )
 }

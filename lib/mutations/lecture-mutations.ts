@@ -21,12 +21,17 @@ export const useLecturesMutation = () => {
 
 export const useLectureImageMutation = () => {
   const queryClient = useQueryClient();
+  const { showErrorToast } = useCustomToast();
   return useMutation({
     mutationFn: ({ file, id }: { file: DocumentPickerAsset, id: string }) => {
       return putLectureImage(file, id);
     },
     onSuccess: (_, { id }) => {
       return queryClient.invalidateQueries({ queryKey: ["lectures", "detail", id] });
+    },
+    onError: (error) => {
+      console.log(error);
+      showErrorToast("Falha ao alterar imagem da palestra");
     }
   })
 };

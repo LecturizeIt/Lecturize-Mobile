@@ -1,14 +1,22 @@
 import { useAuthContext } from "@/contexts/auth-context";
-import { Href, useRouter } from "expo-router";
-import { PropsWithChildren, useEffect } from "react";
+import { useRoute } from "@react-navigation/native";
+import { Href, Redirect } from "expo-router";
+import { PropsWithChildren } from "react";
 
 type ProtectedRouteProps = {
-  redirectTo: Href,
+  directTo: Href,
+  redirectAfter?: boolean;
 }
 
-const ProtectedRoute = ({ children, redirectTo }: PropsWithChildren<ProtectedRouteProps>) => {
+const ProtectedRoute = ({ children, directTo, redirectAfter = true }: PropsWithChildren<ProtectedRouteProps>) => {
   const { isAuthenticated } = useAuthContext();
-  const router = useRouter();
+  const router = useRoute();
+
+  const directToRoute = `${directTo}?redirectTo=${redirectAfter ? router.name : "/"}` as Href;
+
+  if (!isAuthenticated) {
+    return <Redirect href={directToRoute} />
+  }
 
   return (
     <>

@@ -4,7 +4,7 @@ import { BookOpenText, PlusCircle, User } from "lucide-react-native";
 
 const ACCENT_PURPLE = "#962dff";
 
-const Layout = () => {
+const TabsLayout = () => {
   return (
     <Tabs
       screenOptions={{
@@ -65,4 +65,4 @@ const Layout = () => {
   );
 }
 
-export default Layout;
+export default TabsLayout;

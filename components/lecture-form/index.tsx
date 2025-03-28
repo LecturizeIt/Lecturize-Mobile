@@ -10,7 +10,7 @@ import { isAxiosError } from 'axios';
 import { DocumentPickerAsset } from 'expo-document-picker';
 import { useRouter } from 'expo-router';
 import { AlertCircle } from "lucide-react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ScrollView } from 'react-native';
 import { Heading } from "../ui/heading";
@@ -48,18 +48,22 @@ const LectureForm = ({ scrollViewRef }: { scrollViewRef: React.RefObject<ScrollV
   const router = useRouter();
   const { showSuccessToast } = useCustomToast();
 
-
-
   const form = useForm<LectureFormValues>({
     resolver: zodResolver(lectureSchema),
     defaultValues,
     mode: "onSubmit",
   });
 
-
-  const { errors } = form.formState;
-  const { handleSubmit } = form;
+  const { errors, } = form.formState;
+  const { handleSubmit, } = form;
   const watchType = form.watch("type");
+
+  useEffect(() => {
+    if (Object.keys(errors).length) {
+      scrollViewRef.current?.scrollTo({ y: 100 });
+    }
+    // eslint-disable-next-line
+  }, [errors]);
 
   const onSubmit = async (data: LectureFormValues) => {
     const lectureImage = data?.image;
@@ -70,7 +74,9 @@ const LectureForm = ({ scrollViewRef }: { scrollViewRef: React.RefObject<ScrollV
     lectureMutation.mutate(formattedData, {
       onSuccess: async (lecture) => {
         if (lectureImage) {
-          await lectureImageMutation.mutateAsync({ file: lectureImage, id: lecture.id });
+          await lectureImageMutation.mutateAsync({ file: lectureImage, id: lecture.id }, {
+            onError: () => { router.push({ pathname: "/lecture/[id]", params: { id: lecture.id } }); }
+          });
         };
         showSuccessToast("Palestra criada com sucesso!");
         router.push({ pathname: "/lecture/[id]", params: { id: lecture.id } });

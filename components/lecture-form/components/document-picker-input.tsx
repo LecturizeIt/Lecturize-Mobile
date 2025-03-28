@@ -29,6 +29,7 @@ const DocumentPickerInput = ({ image, setImage, scrollViewRef, form: { control, 
     if (response.canceled) return;
 
     const asset = response.assets[0];
+    asset.name = encodeURIComponent(asset.name);
     setImage(asset);
     setValue("image", asset);
   }

@@ -1,13 +1,14 @@
 import { useAuthContext } from "@/contexts/auth-context";
 import useCustomToast from "@/hooks/use-custom-toast";
-import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "expo-router";
 import { login, register } from "@/lib/apis/auth-api";
+import { useMutation } from "@tanstack/react-query";
+import { Href, useLocalSearchParams, useRouter } from "expo-router";
 
 export const useLoginMutation = () => {
   const router = useRouter();
   const { login: loginUser } = useAuthContext();
   const { showSuccessToast } = useCustomToast();
+  const { redirectTo } = useLocalSearchParams<{ redirectTo?: string }>();
 
   return useMutation({
     mutationFn: login,
@@ -17,7 +18,7 @@ export const useLoginMutation = () => {
     onSuccess: async (data) => {
       const user = await loginUser(data.accessToken!);
       showSuccessToast(`Bem vindo, ${user.username}`);
-      router.replace("/");
+      router.replace((redirectTo ?? "/") as Href);
     }
   });
 }
@@ -30,7 +31,7 @@ export const useRegisterMutation = () => {
       console.log(err);
     },
     onSuccess: (_data, { email, password, username }, _context) => {
-      loginMutation.mutate({email, password});
+      loginMutation.mutate({ email, password });
     }
   });
 }

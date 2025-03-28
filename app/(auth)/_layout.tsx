@@ -2,7 +2,7 @@ import { Tabs } from "expo-router";
 
 const ACCENT_PURPLE = "#962dff";
 
-const Layout = () => {
+const AuthLayout = () => {
   return (
     <Tabs
       screenOptions={{
@@ -50,4 +50,4 @@ const Layout = () => {
   )
 }
 
-export default Layout;
+export default AuthLayout;

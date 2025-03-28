@@ -4,10 +4,10 @@ import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import useBase64Image from "@/hooks/use-base64-image";
 import { Lecture as LectureType } from "@/types/lecture";
-import { formatDate } from "@/utilities/utils";
+import { formatDateTime } from "@/utilities/utils";
 import { Link } from "expo-router";
 import { ArrowRight } from "lucide-react-native";
-import { Image, Pressable } from "react-native";
+import { Image } from "react-native";
 import { HStack } from "../ui/hstack";
 import { Icon } from "../ui/icon";
 
@@ -26,7 +26,7 @@ const LectureCard = ({ lecture }: { lecture: LectureType }) => {
           />
         </Link>
         <Text className="text-sm font-normal mb-2 mt-4 text-typography-700">
-          {formatDate(lecture.createdAt)}
+          {formatDateTime(lecture.createdAt)}
         </Text>
         <Heading size="lg" className="mb-1">
           {lecture.title}

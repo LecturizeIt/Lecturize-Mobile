@@ -183,6 +183,7 @@ const RegisterForm = () => {
             className="mx-auto w-full max-w-[100px]"
             onPress={handleSubmit(onSubmit)}
             isDisabled={registerMutation.isPending}
+            action='accent'
           >
             {registerMutation.isPending ? (
               <ButtonSpinner color={colors.purple[500]} />

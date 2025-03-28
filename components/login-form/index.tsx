@@ -45,8 +45,8 @@ const LoginForm = () => {
         if (isAxiosError(error) && error.response) {
           const serverError = error.response?.data;
           form.setError("root", { message: serverError.detail });
-        } else form.setError("root", {message: error.message})
-      }
+        } else form.setError("root", { message: error.message })
+      },
     });
   };
 
@@ -122,6 +122,7 @@ const LoginForm = () => {
           className="mx-auto w-full max-w-[100px] items-center justify-center"
           onPress={handleSubmit(onSubmit)}
           isDisabled={loginMutation.isPending}
+          action='accent'
         >
           {loginMutation.isPending ? (
             <ButtonSpinner color={colors.purple[500]} />
