@@ -1,15 +1,20 @@
-import { fetchUser } from "@/lib/apis/auth-api";
 import { User } from "@/types/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { jwtDecode } from "jwt-decode";
 import { PropsWithChildren, useEffect, useState } from "react";
 import { createContext } from "./create-context";
 
 type AuthContextState = {
   user?: User,
-  login: (userAccessToken: string) => Promise<User>,
+  login: () => Promise<User>,
   logout: () => Promise<void>,
   isAuthenticated: boolean,
   isLoading: boolean
+}
+
+type JwtPayload = {
+  iss: string,
+  user: User
 }
 
 const { ContextProvider, useContext } = createContext<AuthContextState>();
@@ -20,17 +25,10 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     const getTokenAsync = async () => {
-      let userAccessToken: string | null;
-
       try {
-        userAccessToken = await AsyncStorage.getItem("accessToken");
-        if (userAccessToken === null) {
-          throw new Error("No access token in storage");
-        }
-        await login(userAccessToken);
-
+        await login();
       } catch (err) {
-        console.log(err);
+        console.error("[useAuthContext] - Erro ao tentar autenticar usuário no inicio da aplicação: ",err);
         await logout();
 
       } finally {
@@ -44,16 +42,17 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     // eslint-disable-next-line
   }, []);
 
-  const getUserFromAccessToken = async (accessToken: string) => {
-    const user = await fetchUser(accessToken);
-    return user;
+  const decodeAccessToken = async (accessToken: string) => {
+    const decoded = jwtDecode<JwtPayload>(accessToken);
+    return decoded.user;
   }
 
-  const login = async (userAccessToken: string) => {
-    const user = await getUserFromAccessToken(userAccessToken);
-    await AsyncStorage.setItem("accessToken", userAccessToken);
-    setUser(user);
-    return user;
+  const login = async () => {
+    const accessToken = await AsyncStorage.getItem("accessToken");
+    if (accessToken === null) throw new Error("No access token in storage");
+    const decodedUser = await decodeAccessToken(accessToken);
+    setUser(decodedUser);
+    return decodedUser;
   }
 
   const logout = async () => {

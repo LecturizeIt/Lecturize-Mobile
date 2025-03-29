@@ -13,7 +13,7 @@ export const useLecturesMutation = () => {
       queryClient.invalidateQueries({ queryKey: ["lectures", "list"] });
     },
     onError: (error) => {
-      console.log(error);
+      console.error(`[LecturesMutation] - Erro ao fazer uma requisição POST de uma nova palestra: ${error}`);
       showErrorToast("Falha ao criar palestra");
     }
   })
@@ -30,7 +30,7 @@ export const useLectureImageMutation = () => {
       return queryClient.invalidateQueries({ queryKey: ["lectures", "detail", id] });
     },
     onError: (error) => {
-      console.log(error);
+      console.error(`[LectureImageMutation] - Erro ao fazer uma requisição PUT de uma nova imagem: ${error}`);
       showErrorToast("Falha ao alterar imagem da palestra");
     }
   })

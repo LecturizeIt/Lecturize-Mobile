@@ -2,27 +2,30 @@ import Logo from "@/assets/images/logo.png";
 import { Card } from "@/components/ui/card";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
-import useBase64Image from "@/hooks/use-base64-image";
 import { Lecture as LectureType } from "@/types/lecture";
 import { formatDateTime } from "@/utilities/utils";
+import { Image } from "expo-image";
 import { Link } from "expo-router";
 import { ArrowRight } from "lucide-react-native";
-import { Image } from "react-native";
+import { StyleSheet } from "react-native";
 import { HStack } from "../ui/hstack";
 import { Icon } from "../ui/icon";
 
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
 const LectureCard = ({ lecture }: { lecture: LectureType }) => {
-  const image = useBase64Image(`${BASE_URL}/lectures/${lecture.id}/image`);
+  const imageUrl = `${BASE_URL}/lectures/${lecture.id}/image`
   return (
     <>
       <Card size="md" variant="elevated" className="m-3 pb-[1rem] shadow-2xl" key={lecture.id}>
         <Link href={{ pathname: "/lecture/[id]", params: { id: lecture.id } }} className="w-full">
           <Image
-            source={image ? { uri: image } : Logo}
+            source={imageUrl}
             className="w-full h-[200px]"
-            resizeMode="contain"
+            contentFit="contain"
+            style={styles.image}
+            placeholder={Logo}
+            transition={1000}
           />
         </Link>
         <Text className="text-sm font-normal mb-2 mt-4 text-typography-700">
@@ -43,3 +46,10 @@ const LectureCard = ({ lecture }: { lecture: LectureType }) => {
 }
 
 export default LectureCard;
+
+const styles = StyleSheet.create({
+  image: {
+    width: "100%",
+    height: 200
+  }
+})

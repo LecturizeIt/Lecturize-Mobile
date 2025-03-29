@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Dimensions, useWindowDimensions } from 'react-native';
 
+// eslint-disable-next-line
 import * as tailwindConfig from '@/tailwind.config';
 import resolveConfig from 'tailwindcss/resolveConfig';
 
@@ -35,6 +36,7 @@ export const getBreakPointValue = (
   if (typeof values !== 'object') return values;
 
   let finalBreakPointResolvedValue: unknown;
+  // eslint-disable-next-line
   const mediaQueriesBreakpoints: Array<MediaQueriesBreakpoints> = [
     {
       key: 'default',
@@ -105,6 +107,7 @@ export function isValidBreakpoint(
 }
 
 function getLastValidObject(
+  // eslint-disable-next-line
   mediaQueries: Array<{
     key: breakpoints;
     breakpoint: number;
