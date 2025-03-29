@@ -1,6 +1,7 @@
 import { useAuthContext } from "@/contexts/auth-context";
 import useCustomToast from "@/hooks/use-custom-toast";
 import { login, register } from "@/lib/apis/auth-api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useMutation } from "@tanstack/react-query";
 import { Href, useLocalSearchParams, useRouter } from "expo-router";
 
@@ -12,11 +13,12 @@ export const useLoginMutation = () => {
 
   return useMutation({
     mutationFn: login,
-    onError: (err) => {
-      console.log(err);
+    onError: (error) => {
+      console.error(`[LoginMutation] - Erro ao fazer uma requisição POST de uma autenticação: ${error}`);
     },
-    onSuccess: async (data) => {
-      const user = await loginUser(data.accessToken!);
+    onSuccess: async ({ accessToken }) => {
+      await AsyncStorage.setItem("accessToken", accessToken);
+      const user = await loginUser();
       showSuccessToast(`Bem vindo, ${user.username}`);
       router.replace((redirectTo ?? "/") as Href);
     }
@@ -27,8 +29,8 @@ export const useRegisterMutation = () => {
   const loginMutation = useLoginMutation();
   return useMutation({
     mutationFn: register,
-    onError: (err) => {
-      console.log(err);
+    onError: (error) => {
+      console.error(`[RegisterMutation] - Erro ao fazer uma requisição POST de uma nova conta: ${error}`);
     },
     onSuccess: (_data, { email, password, username }, _context) => {
       loginMutation.mutate({ email, password });
