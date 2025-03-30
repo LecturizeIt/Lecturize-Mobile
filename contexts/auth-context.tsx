@@ -1,4 +1,4 @@
-import { User } from "@/types/auth";
+import { Roles, User } from "@/types/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import { PropsWithChildren, useEffect, useState } from "react";
@@ -9,7 +9,8 @@ type AuthContextState = {
   login: () => Promise<User>,
   logout: () => Promise<void>,
   isAuthenticated: boolean,
-  isLoading: boolean
+  isLoading: boolean,
+  isAdmin: boolean
 }
 
 type JwtPayload = {
@@ -28,7 +29,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       try {
         await login();
       } catch (err) {
-        console.error("[useAuthContext] - Erro ao tentar autenticar usuário no inicio da aplicação: ",err);
+        console.log("[useAuthContext] - Erro ao tentar autenticar usuário no inicio da aplicação: ", err);
         await logout();
 
       } finally {
@@ -61,9 +62,10 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   }
 
   const isAuthenticated = user !== undefined;
+  const isAdmin = !!(user?.roles.some(r => Roles.ADMIN === r));
 
   return (
-    <ContextProvider value={{ login, logout, user, isAuthenticated, isLoading }}>
+    <ContextProvider value={{ login, logout, user, isAuthenticated, isLoading, isAdmin }}>
       {children}
     </ContextProvider>
   )

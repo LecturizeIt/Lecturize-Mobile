@@ -1,18 +1,18 @@
 import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
 import { FormControl, FormControlError, FormControlErrorIcon, FormControlErrorText } from '@/components/ui/form-control';
 import { DATE_NOW, DATE_NOW_PLUS_TIRTHY } from "@/constants";
-import useCustomToast from '@/hooks/use-custom-toast';
-import { useLectureImageMutation, useLecturesMutation } from '@/lib/mutations/lecture-mutations';
+import { useLectureImageMutation, useLecturesMutation, useLectureUpdateMutation } from '@/lib/mutations/lecture-mutations';
 import { LectureFormValues, lectureSchema } from "@/lib/schemas/lecture-schema";
-import { Tag } from "@/types/lecture";
+import { Lecture, LectureTypes, Tag } from "@/types/lecture";
+import { getApiFormattedLectureType } from '@/utilities/utils';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isAxiosError } from 'axios';
 import { DocumentPickerAsset } from 'expo-document-picker';
-import { useRouter } from 'expo-router';
 import { AlertCircle } from "lucide-react-native";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ScrollView } from 'react-native';
+import colors from 'tailwindcss/colors';
 import { Heading } from "../ui/heading";
 import { VStack } from "../ui/vstack";
 import AddressInput from './components/address-input';
@@ -26,7 +26,8 @@ import TagsModal from "./components/tags-modal";
 import TitleInput from "./components/title-input";
 import TypeSelectInput from './components/type-select-input';
 import UrlInput from './components/url-input';
-import colors from 'tailwindcss/colors';
+import useCustomToast from '@/hooks/use-custom-toast';
+import { useRouter } from 'expo-router';
 
 const defaultValues: LectureFormValues = {
   title: 'asdasd',
@@ -41,21 +42,50 @@ const defaultValues: LectureFormValues = {
   tags: [],
 }
 
-const LectureForm = ({ scrollViewRef }: { scrollViewRef: React.RefObject<ScrollView> }) => {
+type LectureFormProps = {
+  scrollViewRef: React.RefObject<ScrollView>
+  update?: Lecture
+}
+
+const LectureForm = ({ scrollViewRef, update }: LectureFormProps) => {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [image, setImage] = useState<DocumentPickerAsset | undefined>(undefined);
+  const [startsAt, setStartsAt] = useState(new Date(defaultValues.startsAt));
+  const [endsAt, setEndsAt] = useState(new Date(defaultValues.endsAt));
+
   const lectureMutation = useLecturesMutation();
+  const lectureUpdateMutation = useLectureUpdateMutation();
   const lectureImageMutation = useLectureImageMutation();
-  const router = useRouter();
+
+  const isPending = (lectureMutation.isPending || lectureImageMutation.isPending || lectureUpdateMutation.isPending);
+
   const { showSuccessToast } = useCustomToast();
+  const router = useRouter();
+
+  const initialValues = useMemo(() => {
+    if (update) {
+      const { id, metrics, organizer, type, url, address, maximumCapacity, ...rest } = update;
+      setSelectedTags(rest.tags);
+      setStartsAt(new Date(rest.startsAt));
+      setEndsAt(new Date(rest.endsAt));
+      return {
+        ...rest,
+        type: getApiFormattedLectureType(type as LectureTypes),
+        url: url === null ? "" : url,
+        address: address === null ? "" : address,
+        maximumCapacity: maximumCapacity === null ? 0 : maximumCapacity,
+      } as LectureFormValues;
+    }
+    return defaultValues;
+  }, [update]);
 
   const form = useForm<LectureFormValues>({
     resolver: zodResolver(lectureSchema),
-    defaultValues,
+    defaultValues: initialValues,
     mode: "onSubmit",
   });
 
-  const { errors, } = form.formState;
+  const { errors } = form.formState;
   const { handleSubmit, } = form;
   const watchType = form.watch("type");
 
@@ -66,21 +96,15 @@ const LectureForm = ({ scrollViewRef }: { scrollViewRef: React.RefObject<ScrollV
     // eslint-disable-next-line
   }, [errors]);
 
-  const onSubmit = async (data: LectureFormValues) => {
-    const lectureImage = data?.image;
-    const formattedData: LectureFormValues = {
-      ...data,
-      image: undefined,
-    };
-    lectureMutation.mutate(formattedData, {
-      onSuccess: async (lecture) => {
-        if (lectureImage) {
-          await lectureImageMutation.mutateAsync({ file: lectureImage, id: lecture.id }, {
-            onError: () => { router.push({ pathname: "/lecture/[id]", params: { id: lecture.id } }); }
-          });
+  const onUpdateSubmit = (id: string, newLecture: LectureFormValues, image: any) => {
+    lectureUpdateMutation.mutate({ id, newLecture }, {
+      onSuccess: async ({ id }) => {
+        if (image) {
+          await lectureImageMutation.mutateAsync({ file: image, id });
         };
-        showSuccessToast("Palestra criada com sucesso!");
-        router.push({ pathname: "/lecture/[id]", params: { id: lecture.id } });
+        showSuccessToast("Palestra atualizada com sucesso!");
+        router.push({ pathname: "/lecture/[id]", params: { id } });
+        form.reset();
       },
       onError: (error) => {
         if (isAxiosError(error)) {
@@ -91,10 +115,43 @@ const LectureForm = ({ scrollViewRef }: { scrollViewRef: React.RefObject<ScrollV
     });
   }
 
+  const onCreateSubmit = (newLecture: LectureFormValues, image: any) => {
+    lectureMutation.mutate(newLecture, {
+      onSuccess: async ({ id }) => {
+        if (image) {
+          await lectureImageMutation.mutateAsync({ file: image, id });
+        };
+        showSuccessToast("Palestra criada com sucesso!");
+        router.push({ pathname: "/lecture/[id]", params: { id } });
+        form.reset();
+      },
+      onError: (error) => {
+        if (isAxiosError(error)) {
+          const serverError = error.response?.data;
+          form.setError("root", { message: serverError.detail });
+        }
+      },
+    });
+  }
+
+  const onSubmit = async (data: LectureFormValues) => {
+    const lectureImage = data?.image;
+    const formattedData: LectureFormValues = { ...data, image: undefined, };
+    if (update) {
+      onUpdateSubmit(update.id, formattedData, lectureImage);
+      return;
+    }
+    onCreateSubmit(formattedData, lectureImage);
+  };
+
   return (
     <>
-      <Heading className='text-typography-950 mb-6' size="xl">Divulgue sua palestra</Heading>
-      <FormControl className="p-4 border rounded-lg border-outline-300 w-full" isInvalid={Boolean(errors.root)} isDisabled={lectureMutation.isPending || lectureImageMutation.isPending}>
+      <Heading className='text-typography-950 mb-6' size="xl">{update ? 'Atualize sua palestra' : 'Divulgue sua palestra'}</Heading>
+      <FormControl
+        className="p-4 border rounded-lg border-outline-300 w-full"
+        isInvalid={Boolean(errors.root)}
+        isDisabled={isPending}
+      >
         <VStack space="xl">
           <FormControlError>
             <VStack className='w-full px-[1rem] gap-4'>
@@ -118,11 +175,21 @@ const LectureForm = ({ scrollViewRef }: { scrollViewRef: React.RefObject<ScrollV
           </VStack>
 
           <VStack space="xs">
-            <StartsAtDatetimePickerInput form={form} isDisabled={lectureMutation.isPending || lectureImageMutation.isPending} />
+            <StartsAtDatetimePickerInput
+              setStartsAt={setStartsAt}
+              startsAt={startsAt}
+              form={form}
+              isDisabled={isPending}
+            />
           </VStack>
 
           <VStack space="xs">
-            <EndsAtDatetimePickerInput form={form} isDisabled={lectureMutation.isPending || lectureImageMutation.isPending} />
+            <EndsAtDatetimePickerInput
+              endsAt={endsAt}
+              setEndsAt={setEndsAt}
+              form={form}
+              isDisabled={isPending}
+            />
           </VStack>
 
           <VStack space="md">
@@ -148,20 +215,30 @@ const LectureForm = ({ scrollViewRef }: { scrollViewRef: React.RefObject<ScrollV
           )}
 
           <VStack className="justify-center" space="md">
-            <TagsModal selectedTags={selectedTags} setSelectedTags={setSelectedTags} form={form} isDisabled={lectureMutation.isPending || lectureImageMutation.isPending} />
+            <TagsModal
+              selectedTags={selectedTags}
+              setSelectedTags={setSelectedTags}
+              form={form}
+              isDisabled={isPending}
+            />
           </VStack>
 
           <VStack className="justify-center gap-0">
-            <DocumentPickerInput image={image} setImage={setImage} scrollViewRef={scrollViewRef} form={form} isDisabled={lectureMutation.isPending || lectureImageMutation.isPending} />
+            <DocumentPickerInput
+              image={image}
+              setImage={setImage}
+              scrollViewRef={scrollViewRef}
+              form={form}
+              isDisabled={isPending} />
           </VStack>
 
           <Button
             className="mx-auto w-full max-w-[100px] items-center justify-center"
             onPress={handleSubmit(onSubmit)}
             action='accent'
-            isDisabled={lectureMutation.isPending || lectureImageMutation.isPending}
+            isDisabled={isPending}
           >
-            {(lectureMutation.isPending || lectureImageMutation.isPending) ? (
+            {(isPending) ? (
               <ButtonSpinner color={colors.purple[500]} />
             ) : (
               <ButtonText className="text-typography-0">Entrar</ButtonText>
