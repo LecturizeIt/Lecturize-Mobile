@@ -1,5 +1,7 @@
+import TagBadge from "@/components/tag-badge";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
+import { HStack } from "@/components/ui/hstack";
 import { CloseIcon, Icon } from "@/components/ui/icon";
 import {
   Modal,
@@ -10,27 +12,26 @@ import {
   ModalHeader
 } from "@/components/ui/modal";
 import { useTagsQuery } from "@/lib/queries/lecture-queries";
+import { LectureFormValues } from "@/lib/schemas/lecture-schema";
 import { Tag } from "@/types/lecture";
 import { Search } from "lucide-react-native";
 import { useEffect, useState } from "react";
+import { UseFormReturn } from "react-hook-form";
 import ErrorMessage from "../../error-fallback/error-message";
 import SuspenseLoading from "../../suspense-loading";
 import { Box } from "../../ui/box";
 import { Center } from "../../ui/center";
 import { Input, InputField, InputIcon, InputSlot } from "../../ui/input";
 import { Text } from "../../ui/text";
-import { LectureFormValues } from "@/lib/schemas/lecture-schema";
-import { UseFormReturn } from "react-hook-form";
-import TagBadge from "@/components/tag-badge";
-import { HStack } from "@/components/ui/hstack";
 
 type TagsModalProps = {
   selectedTags: Tag[],
   setSelectedTags: React.Dispatch<React.SetStateAction<Tag[]>>,
   form: UseFormReturn<LectureFormValues>,
+  isDisabled: boolean
 }
 
-const TagsModal = ({ selectedTags, setSelectedTags, form: { control, formState: { errors }, setValue } }: TagsModalProps) => {
+const TagsModal = ({ selectedTags, setSelectedTags, form: { control, formState: { errors }, setValue }, isDisabled }: TagsModalProps) => {
   const [showModal, setShowModal] = useState(false);
   const { data, error, isLoading, isError, isFetching } = useTagsQuery();
   const [search, setSearch] = useState<string>("");
@@ -55,11 +56,11 @@ const TagsModal = ({ selectedTags, setSelectedTags, form: { control, formState: 
       {selectedTags.length ? (
         <HStack className="flex-wrap gap-3">
           {selectedTags.map(({ name, id }) => (
-            <TagBadge key={id} name={name} />
+            <TagBadge key={id} name={name!} />
           ))}
         </HStack>
       ) : null}
-      <Button variant="outline" onPress={() => setShowModal(true)}>
+      <Button variant="outline" onPress={() => setShowModal(true)} isDisabled={isDisabled}>
         <ButtonText>Selecionar categorias</ButtonText>
       </Button>
       <Modal

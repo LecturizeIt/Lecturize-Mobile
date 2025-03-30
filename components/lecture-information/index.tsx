@@ -40,7 +40,7 @@ const LectureInformation = ({ id }: { id: string }) => {
     <Layout>
       <HStack className="w-full justify-start items-start gap-2 flex-wrap">
         <Text className="text-typography-400 font-semibold text-md me-2">{formatDate(lecture?.createdAt!)}</Text>
-        <LectureTags tags={lecture?.tags} />
+        {lecture?.tags ? <LectureTags tags={lecture?.tags} /> : null}
       </HStack>
       <VStack className="gap-3">
         <Heading size="xl" className="capitalize text-typography-800">{lecture?.title}</Heading>

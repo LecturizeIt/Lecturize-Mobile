@@ -1,61 +1,24 @@
-import CustomHeader from '@/components/custom-header';
-import ErrorFallback from '@/components/error-fallback';
-import Providers from '@/components/providers';
-import { Icon } from '@/components/ui/icon';
-import "@/global.css";
-import { useRouter } from 'expo-router';
-import { Drawer } from 'expo-router/drawer';
+import ErrorFallback from "@/components/error-fallback";
+import Providers from "@/components/providers";
+import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { BookOpenText, KeyRound, Settings } from 'lucide-react-native';
 import { ErrorBoundary } from "react-error-boundary";
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function RootLayout() {
-  const router = useRouter();
-
+const RootLayout = () => {
   return (
     <Providers>
-      <GestureHandlerRootView className='flex-1'>
+      <SafeAreaView className="flex-1 bg-background-0">
+        <StatusBar style='auto' />
         <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <StatusBar style='auto' />
-          <Drawer screenOptions={{
-            drawerStyle: { maxWidth: "70%" },
-            swipeEnabled: false,
-            header: (props) => <CustomHeader {...props} />,
-          }}>
-            <Drawer.Screen
-              name="(tabs)"
-              options={{
-                drawerLabel: 'Home',
-                title: "Lectures",
-                drawerIcon: ({ color }) => <Icon as={BookOpenText} color={color} />
-              }}
-              listeners={() => ({
-                drawerItemPress: (props) => {
-                  props.preventDefault();
-                  router.push("/");
-                }
-              })}
-            />
-            <Drawer.Screen
-              name="(auth)"
-              options={{
-                drawerLabel: 'Autenticação',
-                title: 'Autenticação',
-                drawerIcon: ({ color }) => <Icon as={KeyRound} color={color} />,
-              }}
-            />
-            <Drawer.Screen
-              name="settings"
-              options={{
-                drawerLabel: 'Settings',
-                title: 'Settings',
-                drawerIcon: ({ color }) => <Icon as={Settings} color={color} />
-              }}
-            />
-          </Drawer>
+          <Stack>
+            <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
+            <Stack.Screen name="create-lecture" options={{ headerShown: false, }} />
+          </Stack>
         </ErrorBoundary >
-      </GestureHandlerRootView>
+      </SafeAreaView>
     </Providers >
-  );
+  )
 }
+
+export default RootLayout;
