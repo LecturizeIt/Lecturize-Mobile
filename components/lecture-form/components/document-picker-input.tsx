@@ -14,10 +14,11 @@ type DocumentPickerInputProps = {
   image?: DocumentPicker.DocumentPickerAsset,
   setImage: React.Dispatch<React.SetStateAction<DocumentPicker.DocumentPickerAsset | undefined>>,
   scrollViewRef: React.RefObject<ScrollView>,
-  form: UseFormReturn<LectureFormValues>
+  form: UseFormReturn<LectureFormValues>,
+  isDisabled: boolean
 }
 
-const DocumentPickerInput = ({ image, setImage, scrollViewRef, form: { control, formState: { errors }, setValue } }: DocumentPickerInputProps) => {
+const DocumentPickerInput = ({ image, setImage, scrollViewRef, form: { control, formState: { errors }, setValue }, isDisabled }: DocumentPickerInputProps) => {
   const [showImage, setShowImage] = useState(true);
 
   const handleDocumentPicker = async () => {
@@ -78,7 +79,7 @@ const DocumentPickerInput = ({ image, setImage, scrollViewRef, form: { control, 
         name="image"
         render={({ field }) => (
           <Input className="w-full mt-4">
-            <Pressable className='w-full' onPress={handleDocumentPicker}>
+            <Pressable className='w-full' onPress={handleDocumentPicker} disabled={isDisabled}>
               <InputField
                 type="text"
                 placeholder="Imagem de exposição da sua palestra"

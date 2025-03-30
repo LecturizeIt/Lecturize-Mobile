@@ -9,7 +9,12 @@ import { Platform } from 'react-native';
 import { HStack } from "../../ui/hstack";
 import { Text } from "../../ui/text";
 
-const StartsAtDatetimePickerInput = ({ form: { control, formState: { errors }, setValue } }: { form: UseFormReturn<LectureFormValues> }) => {
+type StartsAtDatetimePickerInputProps = {
+  form: UseFormReturn<LectureFormValues>,
+  isDisabled: boolean,
+}
+
+const StartsAtDatetimePickerInput = ({ form: { control, formState: { errors }, setValue }, isDisabled }: StartsAtDatetimePickerInputProps) => {
   const [mode, setMode] = useState<"date" | "time">("date");
   const [startsAt, setStartsAt] = useState(DATE_NOW);
   const [showStartsAtPicker, setShowStartsAtPicker] = useState(false);
@@ -41,19 +46,19 @@ const StartsAtDatetimePickerInput = ({ form: { control, formState: { errors }, s
         />
       )}
       <HStack className="w-full gap-2">
-        <Button variant="link" size='md'>
-          <ButtonText className="underline" onPress={() => {
+        <Button variant="link" size='md' isDisabled={isDisabled} onPress={() => {
             setMode("date");
             toggleStartsAtPicker();
           }}>
+          <ButtonText className="underline">
             {startsAt.toDateString()}
           </ButtonText>
         </Button>
-        <Button variant="link" size='md'>
-          <ButtonText className="underline" onPress={() => {
+        <Button variant="link" size='md' isDisabled={isDisabled} onPress={() => {
             setMode("time");
             toggleStartsAtPicker();
           }}>
+          <ButtonText className="underline">
             {startsAt.toLocaleTimeString("pt-BR")}
           </ButtonText>
         </Button>

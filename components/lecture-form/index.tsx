@@ -1,4 +1,4 @@
-import { Button, ButtonText } from '@/components/ui/button';
+import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
 import { FormControl, FormControlError, FormControlErrorIcon, FormControlErrorText } from '@/components/ui/form-control';
 import { DATE_NOW, DATE_NOW_PLUS_TIRTHY } from "@/constants";
 import useCustomToast from '@/hooks/use-custom-toast';
@@ -26,6 +26,7 @@ import TagsModal from "./components/tags-modal";
 import TitleInput from "./components/title-input";
 import TypeSelectInput from './components/type-select-input';
 import UrlInput from './components/url-input';
+import colors from 'tailwindcss/colors';
 
 const defaultValues: LectureFormValues = {
   title: 'asdasd',
@@ -93,7 +94,7 @@ const LectureForm = ({ scrollViewRef }: { scrollViewRef: React.RefObject<ScrollV
   return (
     <>
       <Heading className='text-typography-950 mb-6' size="xl">Divulgue sua palestra</Heading>
-      <FormControl className="p-4 border rounded-lg border-outline-300 w-full" isInvalid={Boolean(errors.root)}>
+      <FormControl className="p-4 border rounded-lg border-outline-300 w-full" isInvalid={Boolean(errors.root)} isDisabled={lectureMutation.isPending || lectureImageMutation.isPending}>
         <VStack space="xl">
           <FormControlError>
             <VStack className='w-full px-[1rem] gap-4'>
@@ -117,11 +118,11 @@ const LectureForm = ({ scrollViewRef }: { scrollViewRef: React.RefObject<ScrollV
           </VStack>
 
           <VStack space="xs">
-            <StartsAtDatetimePickerInput form={form} />
+            <StartsAtDatetimePickerInput form={form} isDisabled={lectureMutation.isPending || lectureImageMutation.isPending} />
           </VStack>
 
           <VStack space="xs">
-            <EndsAtDatetimePickerInput form={form} />
+            <EndsAtDatetimePickerInput form={form} isDisabled={lectureMutation.isPending || lectureImageMutation.isPending} />
           </VStack>
 
           <VStack space="md">
@@ -147,20 +148,24 @@ const LectureForm = ({ scrollViewRef }: { scrollViewRef: React.RefObject<ScrollV
           )}
 
           <VStack className="justify-center" space="md">
-            <TagsModal selectedTags={selectedTags} setSelectedTags={setSelectedTags} form={form} />
+            <TagsModal selectedTags={selectedTags} setSelectedTags={setSelectedTags} form={form} isDisabled={lectureMutation.isPending || lectureImageMutation.isPending} />
           </VStack>
 
           <VStack className="justify-center gap-0">
-            <DocumentPickerInput image={image} setImage={setImage} scrollViewRef={scrollViewRef} form={form} />
+            <DocumentPickerInput image={image} setImage={setImage} scrollViewRef={scrollViewRef} form={form} isDisabled={lectureMutation.isPending || lectureImageMutation.isPending} />
           </VStack>
 
           <Button
             className="mx-auto w-full max-w-[100px] items-center justify-center"
             onPress={handleSubmit(onSubmit)}
+            action='accent'
+            isDisabled={lectureMutation.isPending || lectureImageMutation.isPending}
           >
-            <ButtonText>
-              Criar
-            </ButtonText>
+            {(lectureMutation.isPending || lectureImageMutation.isPending) ? (
+              <ButtonSpinner color={colors.purple[500]} />
+            ) : (
+              <ButtonText className="text-typography-0">Entrar</ButtonText>
+            )}
           </Button>
         </VStack>
       </FormControl>

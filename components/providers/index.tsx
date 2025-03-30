@@ -11,6 +11,7 @@ import {
 } from '@tanstack/react-query';
 import { useColorScheme } from "nativewind";
 import { PropsWithChildren, useEffect } from 'react';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -42,15 +43,17 @@ const Providers = ({ children }: PropsWithChildren) => {
   }, [colorScheme, setColorScheme]);
 
   return (
-    <ThemeProvider value={colorScheme === "light" ? CustomLightTheme : DarkTheme}>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <GluestackUIProvider mode={colorScheme}>
-            {children}
-          </GluestackUIProvider>
-        </AuthProvider>
-      </QueryClientProvider >
-    </ThemeProvider>
+    <SafeAreaProvider>
+        <ThemeProvider value={colorScheme === "light" ? CustomLightTheme : DarkTheme}>
+          <QueryClientProvider client={queryClient}>
+            <AuthProvider>
+              <GluestackUIProvider mode={colorScheme}>
+                {children}
+              </GluestackUIProvider>
+            </AuthProvider>
+          </QueryClientProvider >
+        </ThemeProvider>
+    </SafeAreaProvider>
   );
 }
 

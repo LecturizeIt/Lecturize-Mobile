@@ -1,10 +1,11 @@
 import TabIcon from "@/components/tab-icon";
-import { Tabs } from 'expo-router';
+import { Tabs, useRouter } from 'expo-router';
 import { BookOpenText, PlusCircle, User } from "lucide-react-native";
 
 const ACCENT_PURPLE = "#962dff";
 
 const TabsLayout = () => {
+  const router = useRouter()
   return (
     <Tabs
       screenOptions={{
@@ -37,12 +38,18 @@ const TabsLayout = () => {
         }}
       />
       <Tabs.Screen
-        name='create-lecture'
+        name='create-lecture-placeholder'
         options={{
           title: "Create Lecture",
           headerShown: false,
           tabBarIcon: ({ color, focused }) => <TabIcon color={color} icon={PlusCircle} focused={focused} />,
         }}
+        listeners={() => ({
+          tabPress: (e) => {
+            e.preventDefault();
+            router.push("/create-lecture");
+          }
+        })}
       />
       <Tabs.Screen
         name='profile'

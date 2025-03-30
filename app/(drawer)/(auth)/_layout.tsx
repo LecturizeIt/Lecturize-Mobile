@@ -6,7 +6,6 @@ const AuthLayout = () => {
   return (
     <Tabs
       screenOptions={{
-        // tabBarShowLabel: false,
         tabBarActiveTintColor: ACCENT_PURPLE,
         headerShown: false,
         tabBarStyle: {
