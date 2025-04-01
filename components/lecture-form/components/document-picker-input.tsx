@@ -4,22 +4,34 @@ import { Input, InputField } from '@/components/ui/input';
 import { Text } from '@/components/ui/text';
 import { ACCEPTED_MIME_TYPES } from '@/constants';
 import { LectureFormValues } from '@/lib/schemas/lecture-schema';
+import { LectureWithImage } from '@/types/lecture';
 import * as DocumentPicker from 'expo-document-picker';
 import { Eye, EyeOffIcon, Trash2 } from 'lucide-react-native';
 import { useState } from 'react';
 import { Controller, UseFormReturn } from 'react-hook-form';
-import { Image, Pressable, ScrollView } from 'react-native';
+import { Image, Pressable, ScrollView, StyleSheet } from 'react-native';
+import DeleteLectureImageDialog from './delete-lecture-image-dialog';
+import { encodeRFC5987ValueChars } from '@/utilities/utils';
 
 type DocumentPickerInputProps = {
   image?: DocumentPicker.DocumentPickerAsset,
   setImage: React.Dispatch<React.SetStateAction<DocumentPicker.DocumentPickerAsset | undefined>>,
   scrollViewRef: React.RefObject<ScrollView>,
   form: UseFormReturn<LectureFormValues>,
-  isDisabled: boolean
+  isDisabled: boolean,
+  update?: LectureWithImage
 }
 
-const DocumentPickerInput = ({ image, setImage, scrollViewRef, form: { control, formState: { errors }, setValue }, isDisabled }: DocumentPickerInputProps) => {
+const DocumentPickerInput = ({
+  image,
+  setImage,
+  scrollViewRef,
+  form: { control, formState: { errors }, setValue },
+  isDisabled,
+  update
+}: DocumentPickerInputProps) => {
   const [showImage, setShowImage] = useState(true);
+  const [updateHasImage, setUpdateHasImage] = useState(!!update?.image);
 
   const handleDocumentPicker = async () => {
     const response = await DocumentPicker.getDocumentAsync({
@@ -30,7 +42,7 @@ const DocumentPickerInput = ({ image, setImage, scrollViewRef, form: { control, 
     if (response.canceled) return;
 
     const asset = response.assets[0];
-    asset.name = encodeURIComponent(asset.name);
+    asset.name = encodeRFC5987ValueChars(asset.name);
     setImage(asset);
     setValue("image", asset);
   }
@@ -49,7 +61,6 @@ const DocumentPickerInput = ({ image, setImage, scrollViewRef, form: { control, 
     handleScrollToEnd();
   }
 
-
   return (
     <>
       <Text className="text-typography-900" size="md">Imagem</Text>
@@ -65,10 +76,10 @@ const DocumentPickerInput = ({ image, setImage, scrollViewRef, form: { control, 
                 <ButtonIcon as={Trash2} size='lg' color='red' />
               </Button>
               <Image
-                source={{ uri: image.uri }}
+                source={image}
                 className="w-full h-[200px]"
-                resizeMode="contain"
                 onLoadEnd={handleScrollToEnd}
+                resizeMode='contain'
               />
             </Box>
           )}
@@ -78,16 +89,23 @@ const DocumentPickerInput = ({ image, setImage, scrollViewRef, form: { control, 
         control={control}
         name="image"
         render={({ field }) => (
-          <Input className="w-full mt-4">
-            <Pressable className='w-full' onPress={handleDocumentPicker} disabled={isDisabled}>
-              <InputField
-                type="text"
-                placeholder="Imagem de exposição da sua palestra"
-                editable={false}
-                value={image?.name}
-              />
-            </Pressable>
-          </Input>
+          <>
+            {(updateHasImage && !image) ? (
+              <>
+                <DeleteLectureImageDialog id={update!.id} setUpdateHasImage={setUpdateHasImage} />
+              </>
+            ) : null}
+            <Input className="w-full mt-4">
+              <Pressable className='w-full' onPress={handleDocumentPicker} disabled={isDisabled}>
+                <InputField
+                  type="text"
+                  placeholder={updateHasImage ? update?.image?.description : "Imagem de exposição da sua palestra"}
+                  editable={false}
+                  value={image?.name}
+                />
+              </Pressable>
+            </Input>
+          </>
         )}
       />
       {errors.image && (
@@ -98,3 +116,10 @@ const DocumentPickerInput = ({ image, setImage, scrollViewRef, form: { control, 
 }
 
 export default DocumentPickerInput;
+
+const styles = StyleSheet.create({
+  image: {
+    width: "100%",
+    height: 200
+  }
+})

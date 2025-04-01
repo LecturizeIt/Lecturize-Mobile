@@ -1,13 +1,12 @@
 import { HStack } from "@/components/ui/hstack";
 import { Icon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
-import { LectureTypes } from "@/constants";
+import { LectureTypes } from "@/types/lecture";
 import { Lecture } from "@/types/lecture";
 import { Href, Link } from "expo-router";
 import { LinkIcon, MapPin } from "lucide-react-native";
 
 const TypeInfo = ({ lecture: { type, address, url } }: { lecture: Lecture }) => {
-
   switch (type) {
     case LectureTypes.ONLINE:
       return <OnlineInfo url={url} />

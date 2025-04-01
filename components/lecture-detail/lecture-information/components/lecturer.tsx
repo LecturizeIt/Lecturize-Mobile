@@ -3,9 +3,9 @@ import { Badge, BadgeIcon, BadgeText } from "@/components/ui/badge";
 import { VStack } from "@/components/ui/vstack";
 import { Lecture } from "@/types/lecture";
 import { GraduationCap } from "lucide-react-native";
-import { Heading } from "../../ui/heading";
-import { HStack } from "../../ui/hstack";
-import { Text } from "../../ui/text";
+import { Heading } from "@/components/ui/heading";
+import { HStack } from "@/components/ui/hstack";
+import { Text } from "@/components/ui/text";
 
 const Lecturer = ({ lecture }: { lecture: Lecture }) => {
   return (

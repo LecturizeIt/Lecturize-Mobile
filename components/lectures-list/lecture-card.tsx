@@ -26,6 +26,7 @@ const LectureCard = ({ lecture }: { lecture: LectureType }) => {
             style={styles.image}
             placeholder={Logo}
             transition={1000}
+            cachePolicy={"none"}
           />
         </Link>
         <Text className="text-sm font-normal mb-2 mt-4 text-typography-700">

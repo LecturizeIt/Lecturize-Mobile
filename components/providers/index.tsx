@@ -11,7 +11,7 @@ import {
 } from '@tanstack/react-query';
 import { useColorScheme } from "nativewind";
 import { PropsWithChildren, useEffect } from 'react';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const queryClient = new QueryClient({
   defaultOptions: {

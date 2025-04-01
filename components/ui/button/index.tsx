@@ -131,7 +131,7 @@ const buttonTextStyle = tva({
         'text-success-600 data-[hover=true]:text-success-600 data-[active=true]:text-success-700',
       negative:
         'text-error-600 data-[hover=true]:text-error-600 data-[active=true]:text-error-700',
-      accent: 'color-custom-white'
+      accent: 'color-custom-white data-[active=true]:color-custom-white'
     },
     variant: {
       link: 'data-[hover=true]:underline data-[active=true]:underline',
@@ -193,6 +193,12 @@ const buttonTextStyle = tva({
     {
       variant: 'outline',
       action: 'negative',
+      class:
+        'text-primary-500 data-[hover=true]:text-primary-500 data-[active=true]:text-primary-500',
+    },
+    {
+      variant: 'solid',
+      action: 'accent',
       class:
         'text-primary-500 data-[hover=true]:text-primary-500 data-[active=true]:text-primary-500',
     },

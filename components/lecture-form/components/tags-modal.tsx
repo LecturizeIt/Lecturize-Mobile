@@ -31,7 +31,7 @@ type TagsModalProps = {
   isDisabled: boolean
 }
 
-const TagsModal = ({ selectedTags, setSelectedTags, form: { control, formState: { errors }, setValue }, isDisabled }: TagsModalProps) => {
+const TagsModal = ({ selectedTags, setSelectedTags, form: { setValue }, isDisabled }: TagsModalProps) => {
   const [showModal, setShowModal] = useState(false);
   const { data, error, isLoading, isError, isFetching } = useTagsQuery();
   const [search, setSearch] = useState<string>("");
@@ -39,8 +39,8 @@ const TagsModal = ({ selectedTags, setSelectedTags, form: { control, formState: 
   const filteredTags: Tag[] | undefined = data?.filter(tag => tag.name.toLowerCase().includes(search.toLowerCase()));
 
   const toggleSelectedTag = (tag: Tag) => {
-    if (selectedTags.includes(tag)) {
-      setSelectedTags(prev => [...prev.filter(st => st !== tag)]);
+    if (selectedTags.some(selectedTag => selectedTag.id === tag.id)) {
+      setSelectedTags(prev => [...prev.filter(selectedTag => selectedTag.id !== tag.id)]);
       return;
     }
     setSelectedTags(prev => [...prev, tag]);
@@ -109,7 +109,7 @@ const TagsModal = ({ selectedTags, setSelectedTags, form: { control, formState: 
               {filteredTags?.map(tag => (
                 <Button
                   key={tag.id}
-                  variant={selectedTags.includes(tag) ? "solid" : "outline"}
+                  variant={selectedTags.some(selectedTag => selectedTag.id === tag.id) ? "solid" : "outline"}
                   className="w-fit"
                   size="xs"
                   onPress={() => toggleSelectedTag(tag)}

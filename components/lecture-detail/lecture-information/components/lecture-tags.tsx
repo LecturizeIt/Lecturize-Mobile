@@ -1,5 +1,4 @@
 import TagBadge from "@/components/tag-badge";
-import { Tag } from "@/types/lecture";
 
 const LectureTags = ({ tags }: { tags: { id?: number, name?: string }[] }) => {
   return (
