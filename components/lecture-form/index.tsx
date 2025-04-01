@@ -3,7 +3,7 @@ import { FormControl, FormControlError, FormControlErrorIcon, FormControlErrorTe
 import { DATE_NOW, DATE_NOW_PLUS_TIRTHY } from "@/constants";
 import { useLectureImageMutation, useLecturesMutation, useLectureUpdateMutation } from '@/lib/mutations/lecture-mutations';
 import { LectureFormValues, lectureSchema } from "@/lib/schemas/lecture-schema";
-import { Lecture, LectureTypes, Tag } from "@/types/lecture";
+import { Lecture, LectureTypes, LectureWithImage, Tag } from "@/types/lecture";
 import { getApiFormattedLectureType } from '@/utilities/utils';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isAxiosError } from 'axios';
@@ -44,7 +44,7 @@ const defaultValues: LectureFormValues = {
 
 type LectureFormProps = {
   scrollViewRef: React.RefObject<ScrollView>
-  update?: Lecture
+  update?: LectureWithImage
 }
 
 const LectureForm = ({ scrollViewRef, update }: LectureFormProps) => {
@@ -64,7 +64,7 @@ const LectureForm = ({ scrollViewRef, update }: LectureFormProps) => {
 
   const initialValues = useMemo(() => {
     if (update) {
-      const { id, metrics, organizer, type, url, address, maximumCapacity, ...rest } = update;
+      const { id, metrics, organizer, type, url, address, maximumCapacity, image, ...rest } = update;
       setSelectedTags(rest.tags);
       setStartsAt(new Date(rest.startsAt));
       setEndsAt(new Date(rest.endsAt));
@@ -229,7 +229,9 @@ const LectureForm = ({ scrollViewRef, update }: LectureFormProps) => {
               setImage={setImage}
               scrollViewRef={scrollViewRef}
               form={form}
-              isDisabled={isPending} />
+              isDisabled={isPending}
+              update={update}
+            />
           </VStack>
 
           <Button

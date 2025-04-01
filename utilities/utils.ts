@@ -32,3 +32,13 @@ export const getApiFormattedLectureType = (type: LectureTypes) => {
       throw new Error("Provided types does not exists");
   }
 }
+
+export const encodeRFC5987ValueChars = (fileName: string) => {
+  return (
+    encodeURIComponent(fileName)
+      .replace(/['()*]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`)
+      .replace(/%(7C|60|5E)/g, (str, hex) =>
+        String.fromCharCode(parseInt(hex, 16)),
+      )
+  )
+}

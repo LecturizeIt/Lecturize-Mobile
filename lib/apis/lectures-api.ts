@@ -40,6 +40,20 @@ export const deleteLecture = async (id: string) => {
   return response.data;
 };
 
+export const getLectureImageJson = async (id: string): Promise<LectureImageResponse> => {
+  const response = await axios.get<LectureImageResponse>(`${BASE_URL}/lectures/${id}/image`, {
+    headers: { Accept: "application/json" }
+  });
+  return response.data;
+};
+
+export const deleteLectureImage = async (id: string) => {
+  const accessToken = await AsyncStorage.getItem("accessToken");
+  await axios.delete<void>(`${BASE_URL}/lectures/${id}/image`, {
+    headers: { "Authorization": `Bearer ${accessToken}` }
+  });
+};
+
 export const putLectureVisits = async (id: string) => {
   const accessToken = await AsyncStorage.getItem("accessToken");
   await axios.put<Lecture>(`${BASE_URL}/lectures/${id}/visit`, {
@@ -53,7 +67,6 @@ export const putLectureShares = async (id: string) => {
     headers: { "Authorization": `Bearer ${accessToken}` }
   });
 };
-
 
 export const fetchTags = async (): Promise<Tag[]> => {
   const result = await axios.get(`${BASE_URL}/tags`);

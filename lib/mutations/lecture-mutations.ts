@@ -1,14 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteLecture, postLecture, putLecture, putLectureImage, putLectureShares, putLectureVisits } from "../apis/lectures-api";
+import { deleteLecture, deleteLectureImage, postLecture, putLecture, putLectureImage, putLectureShares, putLectureVisits } from "../apis/lectures-api";
 import useCustomToast from "@/hooks/use-custom-toast";
 import { DocumentPickerAsset } from "expo-document-picker";
 import { useRouter } from "expo-router";
 import { LectureFormValues } from "../schemas/lecture-schema";
+import { Image } from "expo-image";
 
 
 export const useLecturesMutation = () => {
   const { showErrorToast } = useCustomToast();
-
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: postLecture,
@@ -92,3 +92,19 @@ export const useLectureShareMutation = () => {
   })
 }
 
+export const useDeleteLectureImageMutation = () => {
+  const { showErrorToast, showSuccessToast } = useCustomToast();
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteLectureImage,
+    onError: () => {
+      showErrorToast("Falha ao deletar imagem da palestra");
+    },
+    onSuccess: (_, id, c) => {
+      showSuccessToast("Imagem da palestra apagada com sucesso!");
+      queryClient.invalidateQueries({ queryKey: ["lectures", "detail", "image", id] });
+      router.push({ pathname: "/lecture/[id]", params: { id } });
+    }
+  })
+}

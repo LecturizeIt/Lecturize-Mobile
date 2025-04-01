@@ -7,7 +7,11 @@ export type Tag = { id: number, name: string };
 
 export type Metrics = Required<components["schemas"]["LectureMetricsDTO"]>;
 
+export type LectureWithImage = Lecture & { image?: LectureImageResponse };
+
 export type LectureImageResponse = Required<components["schemas"]["LectureImageDTO"]>;
+
+// export type 
 
 export const enum LectureTypes {
   PRESENTIAL = "Presencial",

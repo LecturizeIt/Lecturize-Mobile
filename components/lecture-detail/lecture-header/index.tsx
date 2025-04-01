@@ -47,6 +47,7 @@ const Layout = ({ id, children }: PropsWithChildren<{ id: string }>) => {
         placeholder={Logo}
         key={id}
         cachePolicy={"none"}
+
       />
       {children}
     </Card>

@@ -3,9 +3,7 @@ import LectureInformation from "@/components/lecture-detail/lecture-information"
 import LectureStats from "@/components/lecture-detail/lecture-stats";
 import { VStack } from "@/components/ui/vstack";
 import { useLocalSearchParams } from "expo-router";
-import { ScrollView, StyleSheet } from "react-native";
-
-const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
+import { ScrollView } from "react-native";
 
 const LectureDetailPage = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -27,10 +25,3 @@ const LectureDetailPage = () => {
 }
 
 export default LectureDetailPage;
-
-const styles = StyleSheet.create({
-  image: {
-    width: "100%",
-    height: 200
-  },
-})
