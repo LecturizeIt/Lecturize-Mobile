@@ -36,7 +36,7 @@ const LectureStats = ({ id }: { id: string }) => {
     <>
       <HStack className="items-center gap-6 justify-center w-full relative">
         <LectureChartModal currentLecture={lecture!} chartType={ChartType.MOST_SHARED}>
-          <Box className="flex-row gap-2 items-center border-b border-typography-200">
+          <Box className="flex-row gap-2 items-center">
             <Icon as={Share2} size="md" className="color-typography-500" />
             <Text className="text-typography-400">{lecture?.metrics.timesShared}</Text>
           </Box>
