@@ -42,10 +42,6 @@ const LectureChartModal = ({ children, currentLecture, chartType }: PropsWithChi
   const [showModal, setShowModal] = React.useState(false);
   const { chartData, lecturesQuery } = useLectureChartsData(chartType);
 
-  if (lecturesQuery.isLoading) {
-    return <SuspenseLoading />
-  }
-
   return (
     <Center>
       <Pressable onPress={() => setShowModal(true)} className="underline">
@@ -72,7 +68,9 @@ const LectureChartModal = ({ children, currentLecture, chartType }: PropsWithChi
           <ModalBody>
             <Text className="text-md text-typography-600 text-center mb-1">{chartDescription[chartType].title}</Text>
             <Text className="text-xs text-typography-400 text-center mb-4">{chartDescription[chartType].description}</Text>
-            <LectureChart chartData={chartData!} currentLectureTitle={currentLecture.title} />
+            {lecturesQuery.isLoading ? <SuspenseLoading /> : (
+              <LectureChart chartData={chartData!} currentLecture={currentLecture} />
+            )}
           </ModalBody>
           <ModalFooter>
             <Button

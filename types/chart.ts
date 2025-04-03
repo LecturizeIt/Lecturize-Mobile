@@ -6,4 +6,5 @@ export enum ChartType {
 export type ChartData = {
   name: string,
   data: number | undefined,
+  id: number,
 }

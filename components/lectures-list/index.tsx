@@ -1,35 +1,57 @@
-import { useLecturesQuery } from "@/lib/queries/lecture-queries";
+import { useInfiniteLectureQueries } from "@/lib/queries/lecture-queries";
+import { useLocalSearchParams } from "expo-router";
 import { FlatList } from "react-native";
 import ErrorMessage from "../error-fallback/error-message";
 import NoLecturesFound from "../no-lectures-found";
 import SuspenseLoading from "../suspense-loading";
 import LectureCard from "./lecture-card";
+import LecturesSearchBar from "./lectures-searchbar";
+import { Text } from "../ui/text";
 
 const LecturesList = () => {
-  const { data: lectures, isLoading, isError, isFetching, error } = useLecturesQuery();
+  const { query } = useLocalSearchParams<{ query?: string }>();
+  const q = query ?? "";
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    error,
+    isError,
+    isLoading
+  } = useInfiniteLectureQueries({ q, });
 
-  if (isLoading && !isError) {
-    return <SuspenseLoading />
-  }
-
-  if (isError && !isFetching) {
+  if (isError) {
     return <ErrorMessage error={error} />
   }
 
+  const handleOnReachEnd = () => {
+    if (hasNextPage && !isLoading) fetchNextPage();
+  }
+
+  const dataArray = data?.pages.flatMap(page => page.results) ?? [];
+
   return (
     <>
-      <FlatList
-        data={lectures}
-        keyExtractor={(lecture) => lecture.id}
-        numColumns={1}
-        scrollEnabled={false}
-        className="mt-5 w-full"
-        contentContainerStyle={{ flex: 1, display: "flex" }}
-        renderItem={({ item: lecture }) => (
-          <LectureCard lecture={lecture} />
-        )}
-        ListEmptyComponent={!isLoading && !isError ? <NoLecturesFound /> : null}
-      />
+      <LecturesSearchBar />
+      {isLoading ? <SuspenseLoading /> : (
+        <FlatList
+          data={dataArray}
+          keyExtractor={(lecture, index) => lecture.id}
+          numColumns={1}
+          className="mt-5 w-full"
+          renderItem={({ item: lecture }) => (
+            <LectureCard lecture={lecture} />
+          )}
+          onEndReached={handleOnReachEnd}
+          onEndReachedThreshold={0.5}
+          ListEmptyComponent={!isLoading && !isError ? <NoLecturesFound className="flex-grow border border-accent" /> : null}
+          ListFooterComponent={() => {
+            if (isFetchingNextPage) return <SuspenseLoading className="py-8" />
+            if (!hasNextPage && dataArray.length && !isFetchingNextPage) return <Text className="text-typography-500 text-center">Não há mais palestras a carregar...</Text>
+          }}
+        />
+      )}
     </>
   )
 }

@@ -1,4 +1,4 @@
-import { Lecture, LectureImageResponse, Tag } from "@/types/lecture";
+import { Lecture, LectureImageResponse, PaginatedLectures, Tag } from "@/types/lecture";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { DocumentPickerAsset } from "expo-document-picker";
@@ -10,6 +10,11 @@ export const fetchLectures = async (): Promise<Lecture[]> => {
   const response = await axios.get<Lecture[]>(`${BASE_URL}/lectures`);
   return response.data;
 };
+
+export const fetchPaginatedLectures = async ({ pageParam, q }: { pageParam: number, q: string }) => {
+  const response = await axios.get<PaginatedLectures>(`${BASE_URL}/lectures/paginated?page=${pageParam}&size=4&q=${q}`);
+  return response.data;
+}
 
 export const fetchLecture = async (id: string): Promise<Lecture> => {
   const response = await axios.get<Lecture>(`${BASE_URL}/lectures/${id}`);
