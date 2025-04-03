@@ -17,10 +17,10 @@ import Logo from "../../assets/images/logo.png";
 import colors from 'tailwindcss/colors';
 
 const defaultValues: RegisterFormValues = {
-  username: "tigas",
-  email: "tigas@gmail.com",
+  username: "user",
+  email: "user",
   password: "1234",
-  confirmPassword: "12345",
+  confirmPassword: "1234",
 }
 
 const RegisterForm = () => {

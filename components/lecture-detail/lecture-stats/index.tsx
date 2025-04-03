@@ -1,17 +1,13 @@
-import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
-import { useLectureShareMutation, useLectureVisitMutation } from "@/lib/mutations/lecture-mutations";
-import { useLectureDetailQuery } from "@/lib/queries/lecture-queries";
-import { ChartColumn, Eye, Share2 } from "lucide-react-native";
-import { useEffect } from "react";
 import { Box } from "@/components/ui/box";
 import { HStack } from "@/components/ui/hstack";
 import { Icon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
-import { TouchableHighlight } from "react-native";
-import LectureChartModal from "./components/lecture-chart-modal";
-import { useLectureChartsData } from "@/hooks/use-lecture-charts-data";
+import { useLectureShareMutation, useLectureVisitMutation } from "@/lib/mutations/lecture-mutations";
+import { useLectureDetailQuery } from "@/lib/queries/lecture-queries";
 import { ChartType } from "@/types/chart";
-import ShareLectureMenu from "./components/share-lecture-popover";
+import { Eye, Share2 } from "lucide-react-native";
+import { useEffect } from "react";
+import LectureChartModal from "./components/lecture-chart-modal";
 import ShareLecturePopover from "./components/share-lecture-popover";
 
 const LectureStats = ({ id }: { id: string }) => {
@@ -36,7 +32,7 @@ const LectureStats = ({ id }: { id: string }) => {
     <>
       <HStack className="items-center gap-6 justify-center w-full relative">
         <LectureChartModal currentLecture={lecture!} chartType={ChartType.MOST_SHARED}>
-          <Box className="flex-row gap-2 items-center border-b border-typography-200">
+          <Box className="flex-row gap-2 items-center">
             <Icon as={Share2} size="md" className="color-typography-500" />
             <Text className="text-typography-400">{lecture?.metrics.timesShared}</Text>
           </Box>

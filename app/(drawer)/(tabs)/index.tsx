@@ -1,17 +1,16 @@
 import LecturesList from "@/components/lectures-list";
+import { Box } from "@/components/ui/box";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { Link } from "expo-router";
-import { ScrollView } from "react-native";
 
 const LecturesPage = () => {
 
   return (
-    <ScrollView
+    <Box
       className="flex flex-1 px-5 w-full"
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ alignItems: "center", minHeight: "100%", paddingBottom: 10, paddingTop: 32 }}
+      style={{ alignItems: "center", minHeight: "100%", paddingBottom: 10, paddingTop: 32 }}
     >
       <Heading className="text-typography-950 text-xl">
         Organize Suas Palestras de Forma Inteligente
@@ -26,7 +25,7 @@ const LecturesPage = () => {
         </Button>
       </Link>
       <LecturesList />
-    </ScrollView >
+    </Box >
   )
 }
 

@@ -8,9 +8,10 @@ export const useLectureChartsData = (chartType: ChartType) => {
   const chartData: ChartData[] | undefined = useMemo(() => lecturesQuery.data?.map(lecture => {
     return {
       name: lecture.title,
-      data: chartType === ChartType.MOST_SHARED ? lecture.metrics.timesShared : lecture.metrics.timesVisited
+      data: chartType === ChartType.MOST_SHARED ? lecture.metrics.timesShared : lecture.metrics.timesVisited,
+      id: Number(lecture.id)
     }
-  }).sort((a, b) => a.data! - b.data!), [lecturesQuery.data, chartType]);
+  }).sort((a, b) => a.data! - b.data!).slice(9, 19), [lecturesQuery.data, chartType]);
 
   return { chartData, lecturesQuery }
 }
