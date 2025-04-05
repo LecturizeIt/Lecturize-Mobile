@@ -1,25 +1,25 @@
 import {
-  Select,
-  SelectBackdrop,
-  SelectContent,
-  SelectDragIndicator,
-  SelectDragIndicatorWrapper,
-  SelectIcon,
-  SelectInput,
-  SelectItem,
-  SelectPortal,
-  SelectTrigger,
+    Select,
+    SelectBackdrop,
+    SelectContent,
+    SelectDragIndicator,
+    SelectDragIndicatorWrapper,
+    SelectIcon,
+    SelectInput,
+    SelectItem,
+    SelectPortal,
+    SelectTrigger,
 } from "@/components/ui/select";
 import { LectureFormValues } from "@/lib/schemas/lecture-schema";
+import { LectureTypes } from "@/types/lecture";
 import { ChevronDown } from "lucide-react-native";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { Text } from "../../ui/text";
-import { LectureTypes } from "@/types/lecture";
 
 const getLabel = (type: LectureFormValues["type"]) => {
   switch (type) {
     case ("HYBRID"):
-      return LectureTypes.HYRBID;
+      return LectureTypes.HYBRID;
     case ("ONLINE"):
       return LectureTypes.ONLINE;
     case ("PRESENTIAL"):

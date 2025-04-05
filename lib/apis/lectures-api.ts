@@ -1,4 +1,4 @@
-import { Lecture, LectureImageResponse, PaginatedLectures, Tag } from "@/types/lecture";
+import { Lecture, LectureImage, LectureSummary, PaginatedLectures, Tag } from "@/types/lecture";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { DocumentPickerAsset } from "expo-document-picker";
@@ -7,23 +7,26 @@ import { LectureSearchParamsSchema } from "../schemas/lecture-search-params-sche
 
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
-type FetchPaginatedLecturesParams = {
+type FetchLecturesParams = {
   q?: string,
   sort?: string,
   tags?: string,
   pageParam: number,
   lecturer?: string,
+  size?: number
 }
 
-export const fetchLectures = async (): Promise<Lecture[]> => {
-  const response = await axios.get<Lecture[]>(`${BASE_URL}/lectures`);
-  return response.data;
+export const fetchLectures = async ({ lecturer, q, sort, tags, size }: Omit<FetchLecturesParams, "pageParam">): Promise<LectureSummary[]> => {
+  const parsed = LectureSearchParamsSchema.parse({ sort, q, tags, lecturer, size });
+  const queryStrings = `?size=${parsed.size}&q=${parsed.q}&sort=${parsed.sort}&tags=${parsed.tags}&lecturer=${parsed.lecturer}`
+  const response = await axios.get<PaginatedLectures>(`${BASE_URL}/lectures${queryStrings}`);
+  return response.data.results;
 };
 
-export const fetchPaginatedLectures = async ({ pageParam, q, sort, tags, lecturer }: FetchPaginatedLecturesParams) => {
-  const parsed = LectureSearchParamsSchema.parse({ sort, q, tags, lecturer });
-  const queryStrings = `?page=${pageParam}&size=10&q=${parsed.q}&sort=${parsed.sort}&tags=${parsed.tags}&lecturer=${parsed.lecturer}`
-  const response = await axios.get<PaginatedLectures>(`${BASE_URL}/lectures/paginated${queryStrings}`);
+export const fetchPaginatedLectures = async ({ pageParam, q, sort, tags, lecturer, size }: FetchLecturesParams) => {
+  const parsed = LectureSearchParamsSchema.parse({ sort, q, tags, lecturer, size });
+  const queryStrings = `?page=${pageParam}&size=${parsed.size}&q=${parsed.q}&sort=${parsed.sort}&tags=${parsed.tags}&lecturer=${parsed.lecturer}`
+  const response = await axios.get<PaginatedLectures>(`${BASE_URL}/lectures${queryStrings}`);
   return response.data;
 }
 
@@ -56,8 +59,8 @@ export const deleteLecture = async (id: string) => {
   return response.data;
 };
 
-export const getLectureImageJson = async (id: string): Promise<LectureImageResponse> => {
-  const response = await axios.get<LectureImageResponse>(`${BASE_URL}/lectures/${id}/image`, {
+export const getLectureImageJson = async (id: string): Promise<LectureImage> => {
+  const response = await axios.get<LectureImage>(`${BASE_URL}/lectures/${id}/image`, {
     headers: { Accept: "application/json" }
   });
   return response.data;
@@ -89,7 +92,7 @@ export const fetchTags = async (): Promise<Tag[]> => {
   return result.data;
 };
 
-export const putLectureImage = async (file: DocumentPickerAsset, id: string): Promise<LectureImageResponse> => {
+export const putLectureImage = async (file: DocumentPickerAsset, id: string): Promise<LectureImage> => {
   const accessToken = await AsyncStorage.getItem("accessToken");
   const formData = new FormData();
 
