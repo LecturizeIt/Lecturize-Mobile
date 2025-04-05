@@ -19,7 +19,6 @@ const TabsLayout = () => {
           height: 52,
           overflow: "hidden",
           borderWidth: 1,
-
         },
         tabBarItemStyle: {
           width: "100%",

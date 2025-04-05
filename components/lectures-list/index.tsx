@@ -3,6 +3,7 @@ import { Heading } from "@/components/ui/heading";
 import useScrollUpHandler from "@/hooks/use-scroll-up-handler";
 import { useInfiniteLectureQueries } from "@/lib/queries/lecture-queries";
 import { Lecture } from "@/types/lecture";
+import { LinearGradient } from 'expo-linear-gradient';
 import { Link, useLocalSearchParams } from "expo-router";
 import { ArrowUp } from "lucide-react-native";
 import { useMemo, useRef } from "react";
@@ -15,6 +16,9 @@ import { Icon } from "../ui/icon";
 import { Text } from "../ui/text";
 import StickyHeader from "./components/sticky-header";
 import LectureCard from "./lecture-card";
+import MaskedView from "@react-native-masked-view/masked-view";
+
+const colors = ["#660099", "#9900ff"] as const;
 
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList<Lecture>);
 
@@ -71,7 +75,7 @@ const LecturesList = () => {
         ListFooterComponentStyle={{ marginBottom: 16 }}
         ListFooterComponent={() => {
           if (isLoading) return <SuspenseLoading className="pt-[4rem]" />;
-          if (!isLoading && !isError && !dataArray.length) return <NoLecturesFound className="flex-grow" />;
+          if (!isLoading && !isError && !dataArray.length) return <NoLecturesFound className="flex-grow mt-[4rem]" />;
           if (isFetchingNextPage) return <SuspenseLoading className="py-8" />
           if (!hasNextPage && dataArray.length && !isFetchingNextPage) {
             return <Text className="text-typography-500 text-center">Não há mais palestras a carregar...</Text>
@@ -79,9 +83,13 @@ const LecturesList = () => {
         }}
         ListHeaderComponent={
           <>
-            <Heading className="text-typography-950 text-lg text-center">
-              Organize Suas Palestras de Forma Inteligente
-            </Heading>
+            <MaskedView maskElement={<Heading className="text-5xl text-center bg-transparent">Lecturize it</Heading>}>
+              <LinearGradient colors={colors} start={{ x: 1, y: 1 }} end={{ x: 0, y: 1 }}>
+                <Heading className="text-5xl text-center text-transparent bg-clip-text">
+                  Lecturize it
+                </Heading>
+              </LinearGradient>
+            </MaskedView>
             <Text className="text-typography-600 text-sm font-light w-full max-w-[270px] text-center mt-2 mx-auto">
               Simplifique suas palestras com ferramentas poderosas para gerenciar conteúdo, horários e mais.
             </Text>
