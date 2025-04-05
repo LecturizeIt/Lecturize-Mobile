@@ -1,13 +1,15 @@
 import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
 import { FormControl, FormControlError, FormControlErrorIcon, FormControlErrorText } from '@/components/ui/form-control';
 import { DATE_NOW, DATE_NOW_PLUS_TIRTHY } from "@/constants";
+import useCustomToast from '@/hooks/use-custom-toast';
 import { useLectureImageMutation, useLecturesMutation, useLectureUpdateMutation } from '@/lib/mutations/lecture-mutations';
 import { LectureFormValues, lectureSchema } from "@/lib/schemas/lecture-schema";
-import { Lecture, LectureTypes, LectureWithImage, Tag } from "@/types/lecture";
+import { LectureTypes, LectureWithImage, Tag } from "@/types/lecture";
 import { getApiFormattedLectureType } from '@/utilities/utils';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isAxiosError } from 'axios';
 import { DocumentPickerAsset } from 'expo-document-picker';
+import { useRouter } from 'expo-router';
 import { AlertCircle } from "lucide-react-native";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -26,8 +28,6 @@ import TagsModal from "./components/tags-modal";
 import TitleInput from "./components/title-input";
 import TypeSelectInput from './components/type-select-input';
 import UrlInput from './components/url-input';
-import useCustomToast from '@/hooks/use-custom-toast';
-import { useRouter } from 'expo-router';
 
 const defaultValues: LectureFormValues = {
   title: 'asdasd',

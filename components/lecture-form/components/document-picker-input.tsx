@@ -5,13 +5,13 @@ import { Text } from '@/components/ui/text';
 import { ACCEPTED_MIME_TYPES } from '@/constants';
 import { LectureFormValues } from '@/lib/schemas/lecture-schema';
 import { LectureWithImage } from '@/types/lecture';
+import { encodeRFC5987ValueChars } from '@/utilities/utils';
 import * as DocumentPicker from 'expo-document-picker';
 import { Eye, EyeOffIcon, Trash2 } from 'lucide-react-native';
 import { useState } from 'react';
 import { Controller, UseFormReturn } from 'react-hook-form';
-import { Image, Pressable, ScrollView, StyleSheet } from 'react-native';
+import { Image, Pressable, ScrollView } from 'react-native';
 import DeleteLectureImageDialog from './delete-lecture-image-dialog';
-import { encodeRFC5987ValueChars } from '@/utilities/utils';
 
 type DocumentPickerInputProps = {
   image?: DocumentPicker.DocumentPickerAsset,
@@ -116,10 +116,3 @@ const DocumentPickerInput = ({
 }
 
 export default DocumentPickerInput;
-
-const styles = StyleSheet.create({
-  image: {
-    width: "100%",
-    height: 200
-  }
-})

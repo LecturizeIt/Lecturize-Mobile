@@ -1,9 +1,9 @@
+import clsx from "clsx";
 import { Frown } from "lucide-react-native";
-import { Dimensions, View } from "react-native";
+import { View } from "react-native";
 import { Heading } from "../ui/heading";
 import { Icon } from "../ui/icon";
 import { VStack } from "../ui/vstack";
-import clsx from "clsx";
 
 const NoLecturesFound = ({ className }: { className?: string }) => {
   return (

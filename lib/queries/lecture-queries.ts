@@ -1,17 +1,23 @@
-import { useInfiniteQuery, useQuery, keepPreviousData } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { fetchLecture, fetchLectures, fetchPaginatedLectures, fetchTags, getLectureImageJson } from "../apis/lectures-api";
+
+type InfiniteQueriesParams = {
+  q?: string,
+  sort?: string,
+  tags?: string,
+  lecturer?: string,
+}
 
 export const useLecturesQuery = () => useQuery({
   queryFn: fetchLectures,
   queryKey: ["lecture", "list"],
 });
 
-export const useInfiniteLectureQueries = ({ q }: { q: string }) => useInfiniteQuery({
-  queryKey: ["lecture", "list", q],
-  queryFn: ({ pageParam }) => fetchPaginatedLectures({ pageParam, q }),
+export const useInfiniteLectureQueries = ({ q, sort, tags, lecturer }: InfiniteQueriesParams) => useInfiniteQuery({
+  queryKey: ["lecture", "list", { q, sort, tags, lecturer }],
+  queryFn: ({ pageParam }) => fetchPaginatedLectures({ pageParam, q, sort, tags, lecturer }),
   initialPageParam: 0,
   getNextPageParam: (lastPage, pages) => lastPage.next,
-  placeholderData: keepPreviousData,
 })
 
 export const useLectureDetailQuery = (id: string) => {

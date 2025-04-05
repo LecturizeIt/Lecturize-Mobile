@@ -6,8 +6,8 @@ export const CustomLightTheme: typeof DefaultTheme = {
   dark: false,
   colors: {
     ...DefaultTheme.colors,
-    background: "rgb(242, 242, 242)",
-    // border: "#000",
+    background: "#e9ebf7",
+    card: "#f9f8fe"
   },
   fonts,
 };
@@ -16,7 +16,8 @@ export const CustomDarkTheme: typeof DefaultTheme = {
   dark: true,
   colors: {
     ...DarkTheme.colors,
-    background: "#212121"
+    background: "#10131a",
+    card: "#191b27"
   },
   fonts
 }
