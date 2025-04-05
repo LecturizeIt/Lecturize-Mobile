@@ -7,7 +7,7 @@ const LecturesPage = () => {
   return (
     <Box
       className="flex flex-1 px-10 w-full relative"
-      style={{ alignItems: "center", minHeight: "100%", paddingBottom: 32, paddingTop: 8 }}
+      style={{ alignItems: "center", minHeight: "100%", paddingTop: 8 }}
     >
       <LecturesList />
     </Box >
