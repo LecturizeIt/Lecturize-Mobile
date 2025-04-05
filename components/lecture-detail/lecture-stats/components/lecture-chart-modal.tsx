@@ -9,7 +9,7 @@ import { useLectureChartsData } from "@/hooks/use-lecture-charts-data";
 import { ChartType } from "@/types/chart";
 import { Lecture } from "@/types/lecture";
 import React, { PropsWithChildren } from "react";
-import { Pressable } from "react-native";
+import { Pressable, TouchableOpacity } from "react-native";
 import LectureChart from "./lecture-chart";
 
 type LectureChartModalProps = {
@@ -37,13 +37,13 @@ const chartDescription: ChartDescription = {
 
 const LectureChartModal = ({ children, currentLecture, chartType }: PropsWithChildren<LectureChartModalProps>) => {
   const [showModal, setShowModal] = React.useState(false);
-  const { chartData, lecturesQuery } = useLectureChartsData(chartType);
+  const { chartData, lecturesQuery } = useLectureChartsData(chartType, currentLecture);
 
   return (
     <Center>
-      <Pressable onPress={() => setShowModal(true)} className="underline">
+      <TouchableOpacity onPress={() => setShowModal(true)} className="underline border">
         {children}
-      </Pressable>
+      </TouchableOpacity>
       <Modal
         isOpen={showModal}
         onClose={() => {

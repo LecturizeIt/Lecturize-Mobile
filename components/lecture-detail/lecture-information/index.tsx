@@ -53,7 +53,7 @@ const LectureInformation = ({ id }: { id: string }) => {
 const Layout = ({ children }: PropsWithChildren) => {
   return (
     <>
-      <Card size="md" variant="elevated" className="m-3 p-[1.25rem] shadow-2xl w-full gap-8">
+      <Card size="md" variant="elevated" className="p-[1.25rem] shadow-2xl w-full gap-8">
         {children}
       </Card>
     </>

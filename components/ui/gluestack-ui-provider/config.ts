@@ -4,7 +4,7 @@ import { vars } from 'nativewind';
 export const config = {
   light: vars({
     /* Accent */
-    '--color-accent': '#ad46ff',
+    '--color-accent': '#8d00e7',
 
     '--color-custom-white': '245 245 245',
 
@@ -164,7 +164,7 @@ export const config = {
   }),
   dark: vars({
     /* Accent */
-    '--color-accent': '#ad46ff',
+    '--color-accent': '#8d00e7',
 
     '--color-custom-white': '245 245 245',
 

@@ -1,10 +1,23 @@
-import type { components } from "@/types/openapi-types";
 
-export type User = Required<components["schemas"]["UserDTO"]>;
+export type User = {
+  id: number;
+  username: string;
+  email: string;
+  roles: string[];
+};
 
-export type LoginResponse = Required<components["schemas"]["LoginDTO"]>;
+export type UserSummary = {
+  id: number;
+  email: string;
+  username: string;
+};
+
+export type LoginResponse = {
+  accessToken: string;
+  expiresIn: number;
+};
 
 export enum Roles {
-  ADMIN="ADMIN",
-  USER="USER"
+  ADMIN = "ADMIN",
+  USER = "USER"
 };

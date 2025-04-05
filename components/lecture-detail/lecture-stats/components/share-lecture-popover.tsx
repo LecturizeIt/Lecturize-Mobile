@@ -38,13 +38,13 @@ const ShareLecturePopover = ({ handleLectureShare }: { handleLectureShare: () =>
         <PopoverBody>
           <HStack className="gap-6">
             <Button size="xs" variant="link" action="positive" onPress={() => Linking.openURL("whatsapp://send?text=aaaaaaaaaaaa")}>
-              <Image source={WhatsAppImage} style={{ width: 16, height: 16 }} className="w-[18px] h-[18px]" resizeMode="contain" />
+              <Image source={WhatsAppImage} style={{ width: 16, height: 16 }} className="w-[18px] h-[18px]" contentFit="contain" />
             </Button>
             <Button size="xs" variant="link" action="positive" onPress={() => Linking.openURL("whatsapp://send?text=aaaaaaaaaaaa")}>
               <Image source={InstagramImage} style={{ width: 26, height: 26 }} className="w-[18px] h-[18px]" contentFit="cover" />
             </Button>
             <Button size="xs" variant="link" action="positive" onPress={() => Linking.openURL("whatsapp://send?text=aaaaaaaaaaaa")}>
-              <Image source={TwitterImage} style={{ width: 16, height: 16 }} className="w-[18px] h-[18px]" resizeMode="contain" />
+              <Image source={TwitterImage} style={{ width: 16, height: 16 }} className="w-[18px] h-[18px]" contentFit="contain" />
             </Button>
           </HStack>
         </PopoverBody>
