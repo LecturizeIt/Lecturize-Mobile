@@ -17,7 +17,7 @@ const LectureCard = ({ lecture }: { lecture: LectureType }) => {
   const imageUrl = `${BASE_URL}/lectures/${lecture.id}/image`
   return (
     <>
-      <Card size="md" variant="elevated" className="m-3 pb-[1rem] shadow-2xl" key={lecture.id}>
+      <Card size="md" variant="elevated" className="mb-6 pb-[1rem] shadow-2xl bg-background-card rounded-xl" key={lecture.id}>
         <Link href={{ pathname: "/lecture/[id]", params: { id: lecture.id } }} className="w-full">
           <Image
             source={imageUrl}

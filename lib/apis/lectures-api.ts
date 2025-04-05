@@ -3,16 +3,27 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { DocumentPickerAsset } from "expo-document-picker";
 import { LectureFormValues } from "../schemas/lecture-schema";
+import { LectureSearchParamsSchema } from "../schemas/lecture-search-params-schema";
 
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
+
+type FetchPaginatedLecturesParams = {
+  q?: string,
+  sort?: string,
+  tags?: string,
+  pageParam: number,
+  lecturer?: string,
+}
 
 export const fetchLectures = async (): Promise<Lecture[]> => {
   const response = await axios.get<Lecture[]>(`${BASE_URL}/lectures`);
   return response.data;
 };
 
-export const fetchPaginatedLectures = async ({ pageParam, q }: { pageParam: number, q: string }) => {
-  const response = await axios.get<PaginatedLectures>(`${BASE_URL}/lectures/paginated?page=${pageParam}&size=4&q=${q}`);
+export const fetchPaginatedLectures = async ({ pageParam, q, sort, tags, lecturer }: FetchPaginatedLecturesParams) => {
+  const parsed = LectureSearchParamsSchema.parse({ sort, q, tags, lecturer });
+  const queryStrings = `?page=${pageParam}&size=10&q=${parsed.q}&sort=${parsed.sort}&tags=${parsed.tags}&lecturer=${parsed.lecturer}`
+  const response = await axios.get<PaginatedLectures>(`${BASE_URL}/lectures/paginated${queryStrings}`);
   return response.data;
 }
 

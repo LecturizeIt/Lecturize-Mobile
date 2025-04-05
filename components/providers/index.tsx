@@ -1,9 +1,9 @@
 import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
 import { AuthProvider } from '@/contexts/auth-context';
 import { Theme } from '@/types/theme';
-import { CustomLightTheme } from '@/utilities/themeOptions';
+import { CustomDarkTheme, CustomLightTheme } from '@/utilities/themeOptions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { DarkTheme, ThemeProvider } from '@react-navigation/native';
+import { ThemeProvider } from '@react-navigation/native';
 import {
   MutationCache,
   QueryClient,
@@ -44,15 +44,15 @@ const Providers = ({ children }: PropsWithChildren) => {
 
   return (
     <SafeAreaProvider>
-        <ThemeProvider value={colorScheme === "light" ? CustomLightTheme : DarkTheme}>
-          <QueryClientProvider client={queryClient}>
-            <AuthProvider>
-              <GluestackUIProvider mode={colorScheme}>
-                {children}
-              </GluestackUIProvider>
-            </AuthProvider>
-          </QueryClientProvider >
-        </ThemeProvider>
+      <ThemeProvider value={colorScheme === "light" ? CustomLightTheme : CustomDarkTheme}>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <GluestackUIProvider mode={colorScheme}>
+              {children}
+            </GluestackUIProvider>
+          </AuthProvider>
+        </QueryClientProvider >
+      </ThemeProvider>
     </SafeAreaProvider>
   );
 }

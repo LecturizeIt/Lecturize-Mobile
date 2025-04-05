@@ -8,6 +8,9 @@ export const config = {
 
     '--color-custom-white': '245 245 245',
 
+    '--color-background-theme': '#e9ebf7',
+    '--color-background-card': '#f9f8fe',
+
     '--color-primary-0': '179 179 179',
     '--color-primary-50': '153 153 153',
     '--color-primary-100': '128 128 128',
@@ -164,6 +167,9 @@ export const config = {
     '--color-accent': '#ad46ff',
 
     '--color-custom-white': '245 245 245',
+
+    '--color-background-theme': '#10131a',
+    '--color-background-card': '#191b27',
 
     '--color-primary-0': '166 166 166',
     '--color-primary-50': '175 175 175',

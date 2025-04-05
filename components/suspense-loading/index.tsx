@@ -1,7 +1,7 @@
+import clsx from 'clsx';
 import { ActivityIndicator } from "react-native";
 import colors from "tailwindcss/colors";
 import { Box } from "../ui/box";
-import clsx from 'clsx';
 
 const SuspenseLoading = ({ className }: { className?: string }) => {
   return (

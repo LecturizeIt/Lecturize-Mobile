@@ -1,4 +1,4 @@
-import { Box } from "@/components/ui/box";
+import SuspenseLoading from "@/components/suspense-loading";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Center } from "@/components/ui/center";
 import { Heading } from "@/components/ui/heading";
@@ -6,12 +6,11 @@ import { CloseIcon, Icon } from "@/components/ui/icon";
 import { Modal, ModalBackdrop, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader } from "@/components/ui/modal";
 import { Text } from "@/components/ui/text";
 import { useLectureChartsData } from "@/hooks/use-lecture-charts-data";
+import { ChartType } from "@/types/chart";
 import { Lecture } from "@/types/lecture";
 import React, { PropsWithChildren } from "react";
 import { Pressable } from "react-native";
 import LectureChart from "./lecture-chart";
-import { ChartType } from "@/types/chart";
-import SuspenseLoading from "@/components/suspense-loading";
 
 type LectureChartModalProps = {
   currentLecture: Lecture,
@@ -35,8 +34,6 @@ const chartDescription: ChartDescription = {
     description: "Este gráfico mostra a quantidade de visualizações da sua palestra em relação às 10 palestras mais visitadas"
   }
 }
-
-type X = typeof chartDescription;
 
 const LectureChartModal = ({ children, currentLecture, chartType }: PropsWithChildren<LectureChartModalProps>) => {
   const [showModal, setShowModal] = React.useState(false);

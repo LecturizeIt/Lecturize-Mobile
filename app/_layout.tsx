@@ -8,7 +8,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const RootLayout = () => {
   return (
     <Providers>
-      <SafeAreaView className="flex-1 bg-background-0">
+      <SafeAreaView className="flex-1 bg-background-theme">
         <StatusBar style='auto' />
         <ErrorBoundary FallbackComponent={ErrorFallback}>
           <Stack>

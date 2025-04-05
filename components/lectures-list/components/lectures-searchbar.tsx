@@ -1,15 +1,15 @@
-import { SearchIcon } from "lucide-react-native";
-import { Input, InputField, InputIcon, InputSlot } from "../ui/input";
-import { useEffect, useState } from "react";
+import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { useRouter } from "expo-router";
+import { SearchIcon } from "lucide-react-native";
+import { useEffect, useState } from "react";
 
 const LecturesSearchBar = () => {
-  const [search, setSearch] = useState("");
   const router = useRouter();
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const id = setTimeout(async () => {
-      router.setParams({ query: search })
+      router.setParams({ q: search })
     }, 500);
 
     return () => clearTimeout(id);
@@ -17,15 +17,16 @@ const LecturesSearchBar = () => {
 
   return (
     <>
-      <Input className="mt-8 w-full max-w-[350px] mx-auto">
+      <Input className="w-full mx-auto bg-background-card" size="xl" variant="rounded">
         <InputSlot className="pl-3">
           <InputIcon as={SearchIcon} />
         </InputSlot>
         <InputField
           placeholder="Pesquise por palestras..."
           type="text"
-          defaultValue={search}
+          value={search}
           onChangeText={setSearch}
+          className="text-sm"
         />
       </Input>
     </>
