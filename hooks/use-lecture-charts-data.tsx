@@ -16,12 +16,12 @@ export const useLectureChartsData = (chartType: ChartType, currentLecture: Lectu
     }
   }).sort((a, b) => a.data! - b.data!), [lecturesQuery.data, chartType]);
 
-  fortmatData(chartData, currentLecture, chartType);
+  formatData(chartData, currentLecture, chartType);
 
   return { chartData, lecturesQuery }
 };
 
-const fortmatData = (chartData: ChartData[] | undefined, currentLecture: Lecture, chartType: ChartType) => {
+const formatData = (chartData: ChartData[] | undefined, currentLecture: Lecture, chartType: ChartType) => {
   const currentLectureInChartData = chartData?.some(c => c.id === Number(currentLecture.id));
   if (chartData && !currentLectureInChartData) {
     chartData[0] = {

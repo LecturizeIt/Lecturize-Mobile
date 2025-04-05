@@ -22,7 +22,7 @@ export const waitFor = async (milliseconds: number) => {
 
 export const getApiFormattedLectureType = (type: LectureTypes) => {
   switch (type) {
-    case (LectureTypes.HYRBID):
+    case (LectureTypes.HYBRID):
       return "HYBRID"
     case (LectureTypes.ONLINE):
       return "ONLINE";

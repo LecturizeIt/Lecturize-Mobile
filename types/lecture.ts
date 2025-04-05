@@ -52,6 +52,6 @@ export type PaginatedLectures = {
 
 export const enum LectureTypes {
   PRESENTIAL = "Presencial",
-  HYRBID = "Híbrido",
+  HYBRID = "Híbrido",
   ONLINE = "Online"
 }

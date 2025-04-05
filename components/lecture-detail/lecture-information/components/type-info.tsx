@@ -1,8 +1,7 @@
 import { HStack } from "@/components/ui/hstack";
 import { Icon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
-import { LectureTypes } from "@/types/lecture";
-import { Lecture } from "@/types/lecture";
+import { Lecture, LectureTypes } from "@/types/lecture";
 import { Href, Link } from "expo-router";
 import { LinkIcon, MapPin } from "lucide-react-native";
 
@@ -12,7 +11,7 @@ const TypeInfo = ({ lecture: { type, address, url } }: { lecture: Lecture }) => 
       return <OnlineInfo url={url} />
     case LectureTypes.PRESENTIAL:
       return <PresentialInfo address={address} />
-    case LectureTypes.HYRBID:
+    case LectureTypes.HYBRID:
       return (
         <>
           <OnlineInfo url={url} />

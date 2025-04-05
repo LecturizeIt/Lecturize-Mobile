@@ -94,7 +94,7 @@ const LecturesFilter = () => {
                         </AccordionTrigger>
                       </AccordionHeader>
                       <Divider className="mt-2 mb-4" />
-                      <AccordionContent>
+                      <AccordionContent className="w-full pr-6">
                         {item.element}
                       </AccordionContent>
                     </AccordionItem>
