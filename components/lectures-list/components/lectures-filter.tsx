@@ -52,7 +52,7 @@ const LecturesFilter = () => {
       <Drawer
         isOpen={showDrawer}
         onClose={() => {
-          setShowDrawer(false)
+          setShowDrawer(false);
         }}
         anchor="right"
       >

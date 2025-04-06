@@ -2,13 +2,13 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import useScrollUpHandler from "@/hooks/use-scroll-up-handler";
 import { useInfiniteLectureQueries } from "@/lib/queries/lecture-queries";
-import { allowedValues } from "@/lib/schemas/lecture-search-params-schema";
+import { SortKey } from "@/lib/schemas/lecture-search-params-schema";
 import { LectureSummary } from "@/types/lecture";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from 'expo-linear-gradient';
 import { Link, useLocalSearchParams } from "expo-router";
 import { ArrowUp } from "lucide-react-native";
-import { useCallback, useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import { SectionList, TouchableOpacity } from "react-native";
 import Animated from "react-native-reanimated";
 import ErrorMessage from "../error-fallback/error-message";
@@ -27,10 +27,10 @@ const AnimatedSectionList = Animated.createAnimatedComponent(SectionList<Lecture
 const LecturesList = () => {
   const { animatedButtonStyle, scrollHandler } = useScrollUpHandler();
   const sectionListRef = useRef<SectionList<LectureSummary>>(null);
-  const stickyHeader = useMemo(() => <StickyHeader className="elevation-xl pt-4" />, []);
+  const stickyHeader = useMemo(() => <StickyHeader />, []);
   const {
     q = "",
-    sort = allowedValues["sort"][0],
+    sort = SortKey.NEWEST,
     tags = "",
     lecturer = "",
   } = useLocalSearchParams<{ q?: string, sort?: string, tags?: string, lecturer?: string }>();
@@ -44,8 +44,6 @@ const LecturesList = () => {
     isError,
     isLoading
   } = useInfiniteLectureQueries({ q, sort, tags, lecturer });
-
-  const renderCB = useCallback(_renderItem, [data]);
 
   if (isError) {
     return <ErrorMessage error={error} />
@@ -71,7 +69,7 @@ const LecturesList = () => {
         onEndReached={handleOnReachEnd}
         onEndReachedThreshold={0.5}
         showsVerticalScrollIndicator={false}
-        renderItem={renderCB}
+        renderItem={({ item }: { item: LectureSummary }) => <LectureCard lecture={item} />}
         renderSectionHeader={() => stickyHeader}
         stickySectionHeadersEnabled
         ListFooterComponentStyle={{ marginBottom: 16 }}
@@ -117,6 +115,5 @@ const LecturesList = () => {
   )
 }
 
-const _renderItem = ({ item }: { item: LectureSummary }) => <LectureCard lecture={item} />
 
 export default LecturesList;

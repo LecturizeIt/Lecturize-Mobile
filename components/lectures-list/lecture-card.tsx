@@ -11,10 +11,11 @@ import { FlatList, StyleSheet } from "react-native";
 import TagBadge from "../tag-badge";
 import { HStack } from "../ui/hstack";
 import { Icon } from "../ui/icon";
+import { memo } from "react";
 
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
-const LectureCard = ({ lecture }: { lecture: LectureSummary }) => {
+const LectureCard = memo(function LectureCard({ lecture }: { lecture: LectureSummary }) {
   const imageUrl = `${BASE_URL}/lectures/${lecture.id}/image`
   return (
     <>
@@ -69,7 +70,7 @@ const LectureCard = ({ lecture }: { lecture: LectureSummary }) => {
       </Card>
     </>
   )
-}
+})
 
 export default LectureCard;
 

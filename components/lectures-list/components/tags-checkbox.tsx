@@ -8,11 +8,11 @@ import {
 import { CheckIcon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
 import { useTagsQuery } from "@/lib/queries/lecture-queries";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { TouchableOpacity } from "react-native";
 
-import SuspenseLoading from "@/components/suspense-loading";
 import { useGlobalSearchParams, useRouter } from "expo-router";
+import { Tag } from "@/types/lecture";
 
 const TagsCheckbox = () => {
   const { data: tags, isLoading } = useTagsQuery();
@@ -22,8 +22,6 @@ const TagsCheckbox = () => {
     return [];
   });
   const router = useRouter();
-
-  if (isLoading) return <SuspenseLoading />
 
   const handleSelectTag = (keys: string[]) => {
     router.setParams({ tags: keys.join(",") });
@@ -42,16 +40,22 @@ const TagsCheckbox = () => {
           <Text className="text-xs">Limpar Categorias</Text>
         </TouchableOpacity>
         {tags?.map(tag => (
-          <Checkbox size="sm" value={tag.name} key={tag.id} >
-            <CheckboxIndicator>
-              <CheckboxIcon as={CheckIcon} />
-            </CheckboxIndicator>
-            <CheckboxLabel className="text-typography-600">{tag.name}</CheckboxLabel>
-          </Checkbox>
+          <CheckboxItem {...tag} key={tag.id} />
         ))}
       </CheckboxGroup>
     </>
   )
 }
+
+const CheckboxItem = memo(function CheckboxItem({ name }: Tag) {
+  return (
+    <Checkbox size="sm" value={name} className="mb-[2px]">
+      <CheckboxIndicator>
+        <CheckboxIcon as={CheckIcon} />
+      </CheckboxIndicator>
+      <CheckboxLabel className="text-typography-600">{name}</CheckboxLabel>
+    </Checkbox>
+  )
+})
 
 export default TagsCheckbox;
