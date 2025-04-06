@@ -7,11 +7,10 @@ import { formatDateTime } from "@/utilities/utils";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import { ArrowRight, Eye, Share2 } from "lucide-react-native";
-import { FlatList, ScrollView, StyleSheet } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
+import TagBadge from "../tag-badge";
 import { HStack } from "../ui/hstack";
 import { Icon } from "../ui/icon";
-import TagBadge from "../tag-badge";
-import { Box } from "../ui/box";
 
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 

@@ -9,7 +9,7 @@ import { useLectureChartsData } from "@/hooks/use-lecture-charts-data";
 import { ChartType } from "@/types/chart";
 import { Lecture } from "@/types/lecture";
 import React, { PropsWithChildren } from "react";
-import { Pressable, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import LectureChart from "./lecture-chart";
 
 type LectureChartModalProps = {

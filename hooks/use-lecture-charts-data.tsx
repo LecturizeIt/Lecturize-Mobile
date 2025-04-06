@@ -1,11 +1,11 @@
 import { useLecturesQuery } from "@/lib/queries/lecture-queries";
-import { LectureSearchParams } from "@/lib/schemas/lecture-search-params-schema";
+import { LectureSearchParams, SortKey } from "@/lib/schemas/lecture-search-params-schema";
 import { ChartData, ChartType } from "@/types/chart";
 import { Lecture } from "@/types/lecture";
 import { useMemo } from "react";
 
 export const useLectureChartsData = (chartType: ChartType, currentLecture: Lecture) => {
-  const sortMetric: LectureSearchParams["sort"] = chartType === ChartType.MOST_SHARED ? "metrics.timesShared,desc" : "metrics.timesVisited,desc"
+  const sortMetric: LectureSearchParams["sort"] = chartType === ChartType.MOST_SHARED ? SortKey.MOST_SHARED : SortKey.MOST_VIEWED;
   const lecturesQuery = useLecturesQuery({ size: 10, sort: sortMetric });
 
   const chartData: ChartData[] | undefined = useMemo(() => lecturesQuery.data?.map(lecture => {

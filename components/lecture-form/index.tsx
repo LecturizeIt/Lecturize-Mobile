@@ -4,7 +4,7 @@ import { DATE_NOW, DATE_NOW_PLUS_TIRTHY } from "@/constants";
 import useCustomToast from '@/hooks/use-custom-toast';
 import { useLectureImageMutation, useLecturesMutation, useLectureUpdateMutation } from '@/lib/mutations/lecture-mutations';
 import { LectureFormValues, lectureSchema } from "@/lib/schemas/lecture-schema";
-import { LectureTypes, LectureWithImage, Tag } from "@/types/lecture";
+import { Lecture, LectureTypes, Tag } from "@/types/lecture";
 import { getApiFormattedLectureType } from '@/utilities/utils';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isAxiosError } from 'axios';
@@ -44,7 +44,7 @@ const defaultValues: LectureFormValues = {
 
 type LectureFormProps = {
   scrollViewRef: React.RefObject<ScrollView>
-  update?: LectureWithImage
+  update?: Lecture
 }
 
 const LectureForm = ({ scrollViewRef, update }: LectureFormProps) => {
@@ -74,6 +74,7 @@ const LectureForm = ({ scrollViewRef, update }: LectureFormProps) => {
         url: url === null ? "" : url,
         address: address === null ? "" : address,
         maximumCapacity: maximumCapacity === null ? 0 : maximumCapacity,
+        image: image?.fileName
       } as LectureFormValues;
     }
     return defaultValues;
