@@ -4,13 +4,15 @@ import { Input, InputField } from '@/components/ui/input';
 import { Text } from '@/components/ui/text';
 import { ACCEPTED_MIME_TYPES } from '@/constants';
 import { LectureFormValues } from '@/lib/schemas/lecture-schema';
-import { LectureWithImage } from '@/types/lecture';
+import { Lecture } from '@/types/lecture';
 import { encodeRFC5987ValueChars } from '@/utilities/utils';
 import * as DocumentPicker from 'expo-document-picker';
 import { Eye, EyeOffIcon, Trash2 } from 'lucide-react-native';
 import { useState } from 'react';
 import { Controller, UseFormReturn } from 'react-hook-form';
-import { Image, Pressable, ScrollView } from 'react-native';
+import { Pressable, ScrollView, StyleSheet } from 'react-native';
+import { Image } from "expo-image";
+import Logo from "@/assets/images/logo.png";
 import DeleteLectureImageDialog from './delete-lecture-image-dialog';
 
 type DocumentPickerInputProps = {
@@ -19,8 +21,10 @@ type DocumentPickerInputProps = {
   scrollViewRef: React.RefObject<ScrollView>,
   form: UseFormReturn<LectureFormValues>,
   isDisabled: boolean,
-  update?: LectureWithImage
+  update?: Lecture;
 }
+
+const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
 const DocumentPickerInput = ({
   image,
@@ -31,7 +35,7 @@ const DocumentPickerInput = ({
   update
 }: DocumentPickerInputProps) => {
   const [showImage, setShowImage] = useState(true);
-  const [updateHasImage, setUpdateHasImage] = useState(!!update?.image);
+  const isUpdateAndHasImage = !!update && !!update.image;
 
   const handleDocumentPicker = async () => {
     const response = await DocumentPicker.getDocumentAsync({
@@ -58,13 +62,16 @@ const DocumentPickerInput = ({
 
   const handleShowImage = () => {
     setShowImage(prev => !prev);
-    handleScrollToEnd();
+    const id = setTimeout(() => {
+      handleScrollToEnd();
+    }, 500);
+    return () => clearTimeout(id);
   }
 
   return (
     <>
       <Text className="text-typography-900" size="md">Imagem</Text>
-      {image && (
+      {(image || isUpdateAndHasImage) && (
         <>
           <Button variant='link' onPress={handleShowImage}>
             <ButtonText className='text-typography-900 underline'>{showImage ? "Hide image" : "Show Image"}</ButtonText>
@@ -72,14 +79,24 @@ const DocumentPickerInput = ({
           </Button>
           {showImage && (
             <Box className='w-full relative justify-center items-center'>
-              <Button size='sm' className='rounded-full w-fit mb-2' variant='link' onPress={() => handleResetImage()}>
-                <ButtonIcon as={Trash2} size='lg' color='red' />
-              </Button>
+              {image ? (
+                <Button size='sm' className='rounded-full w-fit mb-2' variant='link' onPress={() => handleResetImage()}>
+                  <ButtonIcon as={Trash2} size='lg' color='red' />
+                </Button>
+              ) : null}
+              {(isUpdateAndHasImage && !image) ? (
+                <>
+                  <DeleteLectureImageDialog id={update!.id} />
+                </>
+              ) : null}
               <Image
-                source={image}
+                source={!image ? `${BASE_URL}/images/${update?.image?.fileName}` : image}
                 className="w-full h-[200px]"
-                onLoadEnd={handleScrollToEnd}
-                resizeMode='contain'
+                contentFit="contain"
+                style={styles.image}
+                placeholder={Logo}
+                transition={200}
+                cachePolicy={"none"}
               />
             </Box>
           )}
@@ -90,18 +107,13 @@ const DocumentPickerInput = ({
         name="image"
         render={({ field }) => (
           <>
-            {(updateHasImage && !image) ? (
-              <>
-                <DeleteLectureImageDialog id={update!.id} setUpdateHasImage={setUpdateHasImage} />
-              </>
-            ) : null}
             <Input className="w-full mt-4">
               <Pressable className='w-full' onPress={handleDocumentPicker} disabled={isDisabled}>
                 <InputField
                   type="text"
-                  placeholder={updateHasImage ? update?.image?.description : "Imagem de exposição da sua palestra"}
+                  placeholder={"Imagem de exposição da sua palestra"}
                   editable={false}
-                  value={image?.name}
+                  value={image ? image?.name : update?.image?.fileName}
                 />
               </Pressable>
             </Input>
@@ -116,3 +128,10 @@ const DocumentPickerInput = ({
 }
 
 export default DocumentPickerInput;
+
+const styles = StyleSheet.create({
+  image: {
+    width: "100%",
+    height: 200
+  }
+})

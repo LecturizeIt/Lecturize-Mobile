@@ -8,14 +8,14 @@ import { LinkIcon, MapPin } from "lucide-react-native";
 const TypeInfo = ({ lecture: { type, address, url } }: { lecture: Lecture }) => {
   switch (type) {
     case LectureTypes.ONLINE:
-      return <OnlineInfo url={url} />
+      return <OnlineInfo url={url!} />
     case LectureTypes.PRESENTIAL:
-      return <PresentialInfo address={address} />
+      return <PresentialInfo address={address!} />
     case LectureTypes.HYBRID:
       return (
         <>
-          <OnlineInfo url={url} />
-          <PresentialInfo address={address} />
+          <OnlineInfo url={url!} />
+          <PresentialInfo address={address!} />
         </>
       )
   }

@@ -17,26 +17,21 @@ import { useState } from "react"
 
 type DeleteLectureAlertDialogProps = {
   id: string,
-  setUpdateHasImage: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const DeleteLectureImageDialog = ({ id, setUpdateHasImage }: DeleteLectureAlertDialogProps) => {
+const DeleteLectureImageDialog = ({ id }: DeleteLectureAlertDialogProps) => {
   const lectureDeleteImageMutation = useDeleteLectureImageMutation();
   const [showAlertDialog, setShowAlertDialog] = useState(false);
 
   const handleClose = () => setShowAlertDialog(false);
 
   const handleDelete = async () => {
-    await lectureDeleteImageMutation.mutateAsync(id, {
-      onSuccess: () => {
-        setUpdateHasImage(false);
-      }
-    });
     handleClose();
+    await lectureDeleteImageMutation.mutateAsync(id);
   }
   return (
     <>
-      <Button className='mt-4 w-full max-w-[150px] mx-auto' variant='outline' action='negative' size='xs' onPress={() => setShowAlertDialog(true)}>
+      <Button className='mb-2 w-full max-w-[150px] mx-auto' variant='outline' action='negative' size='xs' onPress={() => setShowAlertDialog(true)}>
         <ButtonText className=''>
           Apagar imagem atual
         </ButtonText>

@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import WithAuthorization from "@/components/with-authorization";
 import { useAuthContext } from "@/contexts/auth-context";
 import { useLectureDetailQuery } from "@/lib/queries/lecture-queries";
+import { Lecture } from "@/types/lecture";
 import { Image } from "expo-image";
 import { PropsWithChildren, useMemo } from "react";
 import { StyleSheet } from "react-native";
@@ -21,12 +22,12 @@ const LectureHeader = ({ id }: { id: string }) => {
 
   if (isLoading || isError || !isAuthorized) {
     return (
-      <Layout id={id} />
+      <Layout lecture={lecture} />
     )
   }
 
   return (
-    <Layout id={id}>
+    <Layout lecture={lecture}>
       <WithAuthorization isAuthorized={isAuthorized}>
         <LectureSettings id={id} />
       </WithAuthorization>
@@ -35,19 +36,17 @@ const LectureHeader = ({ id }: { id: string }) => {
   )
 }
 
-const Layout = ({ id, children }: PropsWithChildren<{ id: string }>) => {
-  const imageUrl = `${BASE_URL}/lectures/${id}/image`;
+const Layout = ({ lecture, children }: PropsWithChildren<{ lecture?: Lecture }>) => {
   return (
     <Card size="md" variant="elevated" className="m-3 shadow-2xl w-full relative">
       <Image
-        source={imageUrl}
+        source={`${BASE_URL}/lectures/${lecture?.id}/image`}
         className="w-full h-[200px]"
         contentFit="contain"
         style={styles.image}
         placeholder={Logo}
-        key={id}
+        key={lecture?.id + "_" + lecture?.image?.fileName}
         cachePolicy={"none"}
-
       />
       {children}
     </Card>

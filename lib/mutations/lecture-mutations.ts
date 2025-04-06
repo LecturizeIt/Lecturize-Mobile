@@ -1,5 +1,6 @@
 import useCustomToast from "@/hooks/use-custom-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { isAxiosError } from "axios";
 import { DocumentPickerAsset } from "expo-document-picker";
 import { useRouter } from "expo-router";
 import { deleteLecture, deleteLectureImage, postLecture, putLecture, putLectureImage, putLectureShares, putLectureVisits } from "../apis/lectures-api";
@@ -77,7 +78,10 @@ export const useLectureVisitMutation = () => {
   return useMutation({
     mutationFn: putLectureVisits,
     onError: (error) => {
-      console.error(`[LectureVisit] - Erro ao fazer uma requisição PUT de Visit da Lecture: ${error}`);
+      if(isAxiosError(error)) {
+        console.log(error)
+      }
+      // console.error(`[LectureVisit] - Erro ao fazer uma requisição PUT de Visit da Lecture: ${error}`);
     },
   })
 }
@@ -102,8 +106,8 @@ export const useDeleteLectureImageMutation = () => {
     },
     onSuccess: (_, id, c) => {
       showSuccessToast("Imagem da palestra apagada com sucesso!");
-      queryClient.invalidateQueries({ queryKey: ["lectures", "detail", "image", id] });
-      router.push({ pathname: "/lecture/[id]", params: { id } });
+      queryClient.invalidateQueries({ queryKey: ["lectures", "detail", id] });
+      // router.push({ pathname: "/lecture/[id]", params: { id } });
     }
   })
 }

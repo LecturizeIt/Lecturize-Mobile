@@ -1,12 +1,19 @@
 import { z } from "zod";
 
+export enum SortKey {
+  MOST_VIEWED = "metrics.timesVisited,desc",
+  MOST_SHARED = "metrics.timesShared,desc",
+  NEWEST = "createdAt,desc"
+}
+
 export const allowedValues = {
-  sort: ["createdAt,asc", "metrics.timesVisited,desc", "metrics.timesShared,desc"]
+  sort: [SortKey.NEWEST, SortKey.MOST_VIEWED, SortKey.MOST_SHARED],
 } as const;
+
 
 export const LectureSearchParamsSchema = z.object({
   q: z.string().catch(""),
-  sort: z.enum(allowedValues.sort).catch(allowedValues.sort[0]),
+  sort: z.enum(allowedValues.sort).catch(SortKey.NEWEST),
   tags: z.string().catch(""),
   lecturer: z.string().catch(""),
   size: z.number().gt(0).catch(10),
