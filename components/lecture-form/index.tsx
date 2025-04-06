@@ -28,6 +28,7 @@ import TagsModal from "./components/tags-modal";
 import TitleInput from "./components/title-input";
 import TypeSelectInput from './components/type-select-input';
 import UrlInput from './components/url-input';
+import { Card } from '../ui/card';
 
 const defaultValues: LectureFormValues = {
   title: 'asdasd',
@@ -148,107 +149,108 @@ const LectureForm = ({ scrollViewRef, update }: LectureFormProps) => {
   return (
     <>
       <Heading className='text-typography-950 mb-6' size="xl">{update ? 'Atualize sua palestra' : 'Divulgue sua palestra'}</Heading>
-      <FormControl
-        className="p-4 border rounded-lg border-outline-300 w-full"
-        isInvalid={Boolean(errors.root)}
-        isDisabled={isPending}
-      >
-        <VStack space="xl">
-          <FormControlError>
-            <VStack className='w-full px-[1rem] gap-4'>
-              <FormControlErrorIcon as={AlertCircle} className='mx-auto' />
-              <FormControlErrorText className='w-full text-center'>
-                {errors.root?.message}
-              </FormControlErrorText>
-            </VStack>
-          </FormControlError>
+      <Card size="lg" variant="elevated" className="m-3 shadow-2xl w-full relative pb-5">
+        <FormControl
+          isInvalid={Boolean(errors.root)}
+          isDisabled={isPending}
+        >
+          <VStack space="xl">
+            <FormControlError>
+              <VStack className='w-full px-[1rem] gap-4'>
+                <FormControlErrorIcon as={AlertCircle} className='mx-auto' />
+                <FormControlErrorText className='w-full text-center'>
+                  {errors.root?.message}
+                </FormControlErrorText>
+              </VStack>
+            </FormControlError>
 
-          <VStack space="md">
-            <TitleInput form={form} />
-          </VStack>
-
-          <VStack space="md">
-            <LecturerInput form={form} />
-          </VStack>
-
-          <VStack space="md">
-            <DescriptionTextareaInput form={form} />
-          </VStack>
-
-          <VStack space="xs">
-            <StartsAtDatetimePickerInput
-              setStartsAt={setStartsAt}
-              startsAt={startsAt}
-              form={form}
-              isDisabled={isPending}
-            />
-          </VStack>
-
-          <VStack space="xs">
-            <EndsAtDatetimePickerInput
-              endsAt={endsAt}
-              setEndsAt={setEndsAt}
-              form={form}
-              isDisabled={isPending}
-            />
-          </VStack>
-
-          <VStack space="md">
-            <TypeSelectInput form={form} />
-          </VStack>
-
-          {(watchType === "ONLINE" || watchType === "HYBRID") && (
             <VStack space="md">
-              <UrlInput form={form} />
+              <TitleInput form={form} />
             </VStack>
-          )}
 
-          {(watchType === "PRESENTIAL" || watchType === "HYBRID") && (
-            <>
+            <VStack space="md">
+              <LecturerInput form={form} />
+            </VStack>
+
+            <VStack space="md">
+              <DescriptionTextareaInput form={form} />
+            </VStack>
+
+            <VStack space="xs">
+              <StartsAtDatetimePickerInput
+                setStartsAt={setStartsAt}
+                startsAt={startsAt}
+                form={form}
+                isDisabled={isPending}
+              />
+            </VStack>
+
+            <VStack space="xs">
+              <EndsAtDatetimePickerInput
+                endsAt={endsAt}
+                setEndsAt={setEndsAt}
+                form={form}
+                isDisabled={isPending}
+              />
+            </VStack>
+
+            <VStack space="md">
+              <TypeSelectInput form={form} />
+            </VStack>
+
+            {(watchType === "ONLINE" || watchType === "HYBRID") && (
               <VStack space="md">
-                <AddressInput form={form} />
+                <UrlInput form={form} />
               </VStack>
-
-              <VStack space="md">
-                <MaximumCapacityInput form={form} />
-              </VStack>
-            </>
-          )}
-
-          <VStack className="justify-center" space="md">
-            <TagsModal
-              selectedTags={selectedTags}
-              setSelectedTags={setSelectedTags}
-              form={form}
-              isDisabled={isPending}
-            />
-          </VStack>
-
-          <VStack className="justify-center gap-0">
-            <DocumentPickerInput
-              image={image}
-              setImage={setImage}
-              scrollViewRef={scrollViewRef}
-              form={form}
-              isDisabled={isPending}
-              update={update}
-            />
-          </VStack>
-
-          <Button
-            className="mx-auto w-full max-w-[100px] items-center justify-center"
-            onPress={handleSubmit(onSubmit)}
-            action='accent'
-            isDisabled={isPending}
-          >
-            {(isPending) ? (
-              <ButtonSpinner color={colors.purple[500]} />
-            ) : (
-              <ButtonText className="text-typography-0">Entrar</ButtonText>
             )}
-          </Button>
-        </VStack>
-      </FormControl>
+
+            {(watchType === "PRESENTIAL" || watchType === "HYBRID") && (
+              <>
+                <VStack space="md">
+                  <AddressInput form={form} />
+                </VStack>
+
+                <VStack space="md">
+                  <MaximumCapacityInput form={form} />
+                </VStack>
+              </>
+            )}
+
+            <VStack className="justify-center" space="md">
+              <TagsModal
+                selectedTags={selectedTags}
+                setSelectedTags={setSelectedTags}
+                form={form}
+                isDisabled={isPending}
+              />
+            </VStack>
+
+            <VStack className="justify-center gap-0">
+              <DocumentPickerInput
+                image={image}
+                setImage={setImage}
+                scrollViewRef={scrollViewRef}
+                form={form}
+                isDisabled={isPending}
+                update={update}
+              />
+            </VStack>
+
+            <Button
+              className="mx-auto w-full max-w-[100px] items-center justify-center"
+              onPress={handleSubmit(onSubmit)}
+              action='accent'
+              isDisabled={isPending}
+            >
+              {(isPending) ? (
+                <ButtonSpinner color={colors.purple[500]} />
+              ) : (
+                <ButtonText className="text-typography-0">{update ? "Atualizar" : "Criar"}</ButtonText>
+              )}
+            </Button>
+          </VStack>
+        </FormControl>
+      </Card>
     </>
 
   )

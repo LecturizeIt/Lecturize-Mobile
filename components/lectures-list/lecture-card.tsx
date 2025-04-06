@@ -34,7 +34,7 @@ const LectureCard = ({ lecture }: { lecture: LectureSummary }) => {
           {formatDateTime(lecture.createdAt)}
         </Text>
         <FlatList
-          data={lecture.tags}
+          data={lecture.tags.slice(0, 5)}
           keyExtractor={(item, index) => `${item}_${index}`}
           horizontal
           renderItem={({ item: name }) => <TagBadge name={name} />}
