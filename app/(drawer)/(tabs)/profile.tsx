@@ -1,4 +1,5 @@
 import ProtectedRoute from '@/components/protected-route';
+import { useAuthContext } from '@/contexts/auth-context';
 import { Text, View } from 'react-native';
 
 

@@ -16,7 +16,7 @@ export const useLecturesMutation = () => {
       queryClient.invalidateQueries({ queryKey: ["lectures", "list"] });
     },
     onError: (error) => {
-      console.error(`[LecturesMutation] - Erro ao fazer uma requisição POST de uma nova palestra: ${error}`);
+      console.log(`[LecturesMutation] - Erro ao fazer uma requisição POST de uma nova palestra: ${error}`);
       showErrorToast("Falha ao criar palestra");
     }
   })
@@ -34,7 +34,7 @@ export const useLectureDeleteMutation = () => {
       router.push("/");
     },
     onError: (error) => {
-      console.error(`[LectureDeleteMutation] - Erro ao fazer uma requisição DELETE à uma palestra': ${error}`);
+      console.log(`[LectureDeleteMutation] - Erro ao fazer uma requisição DELETE à uma palestra': ${error}`);
       showErrorToast("Falha ao deletar palestra");
     }
   })
@@ -49,7 +49,7 @@ export const useLectureUpdateMutation = () => {
       queryClient.invalidateQueries({ queryKey: ["lectures", "detail", id] });
     },
     onError: (error) => {
-      console.error(`[LectureUpdateMutation] - Erro ao fazer uma requisição PUT de uma lecture: ${error}`);
+      console.log(`[LectureUpdateMutation] - Erro ao fazer uma requisição PUT de uma lecture: ${error}`);
       showErrorToast("Falha ao atualizar palestra");
     }
   });
@@ -67,7 +67,7 @@ export const useLectureImageMutation = () => {
       return queryClient.invalidateQueries({ queryKey: ["lectures", "detail", id] });
     },
     onError: (error, { id }) => {
-      console.error(`[LectureImageMutation] - Erro ao fazer uma requisição PUT de uma nova imagem: ${error}`);
+      console.log(`[LectureImageMutation] - Erro ao fazer uma requisição PUT de uma nova imagem: ${error}`);
       showErrorToast("Falha ao alterar imagem da palestra");
       router.push({ pathname: "/lecture/[id]", params: { id } });
     }
@@ -81,7 +81,7 @@ export const useLectureVisitMutation = () => {
       if(isAxiosError(error)) {
         console.log(error)
       }
-      // console.error(`[LectureVisit] - Erro ao fazer uma requisição PUT de Visit da Lecture: ${error}`);
+      console.log(`[LectureVisit] - Erro ao fazer uma requisição PUT de Visit da Lecture: ${error}`);
     },
   })
 }
@@ -90,14 +90,13 @@ export const useLectureShareMutation = () => {
   return useMutation({
     mutationFn: putLectureShares,
     onError: (error) => {
-      console.error(`[LectureShare] - Erro ao fazer uma requisição PUT de Share da Lecture: ${error}`);
+      console.log(`[LectureShare] - Erro ao fazer uma requisição PUT de Share da Lecture: ${error}`);
     },
   })
 }
 
 export const useDeleteLectureImageMutation = () => {
   const { showErrorToast, showSuccessToast } = useCustomToast();
-  const router = useRouter();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: deleteLectureImage,
@@ -107,7 +106,6 @@ export const useDeleteLectureImageMutation = () => {
     onSuccess: (_, id, c) => {
       showSuccessToast("Imagem da palestra apagada com sucesso!");
       queryClient.invalidateQueries({ queryKey: ["lectures", "detail", id] });
-      // router.push({ pathname: "/lecture/[id]", params: { id } });
     }
   })
 }

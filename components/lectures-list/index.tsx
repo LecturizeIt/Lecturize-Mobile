@@ -8,7 +8,7 @@ import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from 'expo-linear-gradient';
 import { Link, useLocalSearchParams } from "expo-router";
 import { ArrowUp } from "lucide-react-native";
-import { useMemo, useRef } from "react";
+import { memo, useMemo, useRef } from "react";
 import { SectionList, TouchableOpacity } from "react-native";
 import Animated from "react-native-reanimated";
 import ErrorMessage from "../error-fallback/error-message";
@@ -69,7 +69,7 @@ const LecturesList = () => {
         onEndReached={handleOnReachEnd}
         onEndReachedThreshold={0.5}
         showsVerticalScrollIndicator={false}
-        renderItem={({ item }: { item: LectureSummary }) => <LectureCard lecture={item} />}
+        renderItem={({ item }) => <RenderItem item={item} />}
         renderSectionHeader={() => stickyHeader}
         stickySectionHeadersEnabled
         ListFooterComponentStyle={{ marginBottom: 16 }}
@@ -115,5 +115,9 @@ const LecturesList = () => {
   )
 }
 
+
+const RenderItem = memo(function RenderItem({ item }: { item: LectureSummary }) {
+  return <LectureCard lecture={item} />;
+})
 
 export default LecturesList;

@@ -2,8 +2,6 @@ import LecturesList from "@/components/lectures-list";
 import { Box } from "@/components/ui/box";
 
 const LecturesPage = () => {
-
-
   return (
     <Box
       className="flex flex-1 px-10 w-full relative"

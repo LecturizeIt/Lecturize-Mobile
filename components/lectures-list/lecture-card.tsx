@@ -19,7 +19,7 @@ const LectureCard = memo(function LectureCard({ lecture }: { lecture: LectureSum
   const imageUrl = `${BASE_URL}/lectures/${lecture.id}/image`
   return (
     <>
-      <Card size="md" className="shadow-2xl rounded-xl mb-6" key={lecture.id}>
+      <Card size="md" className="shadow-2xl rounded-xl mb-6">
         <Link href={{ pathname: "/lecture/[id]", params: { id: lecture.id } }} className="w-full">
           <Image
             source={imageUrl}

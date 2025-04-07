@@ -74,17 +74,11 @@ export const deleteLectureImage = async (id: string) => {
 };
 
 export const putLectureVisits = async (id: string) => {
-  const accessToken = await AsyncStorage.getItem("accessToken");
-  await axios.put<Lecture>(`${BASE_URL}/lectures/${id}/visit`, {
-    headers: { "Authorization": `Bearer ${accessToken}` }
-  });
+  await axios.put<Lecture>(`${BASE_URL}/lectures/${id}/visit`);
 };
 
 export const putLectureShares = async (id: string) => {
-  const accessToken = await AsyncStorage.getItem("accessToken");
-  await axios.put<Lecture>(`${BASE_URL}/lectures/${id}/share`, {
-    headers: { "Authorization": `Bearer ${accessToken}` }
-  });
+  await axios.put<Lecture>(`${BASE_URL}/lectures/${id}/share`);
 };
 
 export const fetchTags = async (): Promise<Tag[]> => {
