@@ -14,10 +14,11 @@ export const useLoginMutation = () => {
   return useMutation({
     mutationFn: login,
     onError: (error) => {
-      console.error(`[LoginMutation] - Erro ao fazer uma requisição POST de uma autenticação: ${error}`);
+      console.log(`[LoginMutation] - Erro ao fazer uma requisição POST de uma autenticação: ${error}`);
     },
-    onSuccess: async ({ accessToken }) => {
+    onSuccess: async ({ accessToken, refreshToken }) => {
       await AsyncStorage.setItem("accessToken", accessToken);
+      await AsyncStorage.setItem("refreshToken", refreshToken);
       const user = await loginUser();
       showSuccessToast(`Bem vindo, ${user.username}`);
       router.replace((redirectTo ?? "/") as Href);
@@ -30,7 +31,7 @@ export const useRegisterMutation = () => {
   return useMutation({
     mutationFn: register,
     onError: (error) => {
-      console.error(`[RegisterMutation] - Erro ao fazer uma requisição POST de uma nova conta: ${error}`);
+      console.log(`[RegisterMutation] - Erro ao fazer uma requisição POST de uma nova conta: ${error}`);
     },
     onSuccess: (_data, { email, password, username }, _context) => {
       loginMutation.mutate({ email, password });

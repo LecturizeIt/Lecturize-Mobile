@@ -12,9 +12,11 @@ export type UserSummary = {
   username: string;
 };
 
-export type LoginResponse = {
+export type AuthenticationResponse = {
   accessToken: string;
-  expiresIn: number;
+  refreshToken: string;
+  accessTokenExpiresIn: number;
+  refreshTokenExpiresIn: number;
 };
 
 export enum Roles {

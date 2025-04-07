@@ -1,7 +1,8 @@
-import { Roles, User } from "@/types/auth";
+import { AuthenticationResponse, Roles, User } from "@/types/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios, { AxiosError, isAxiosError } from "axios";
 import { jwtDecode } from "jwt-decode";
-import { PropsWithChildren, useEffect, useState } from "react";
+import { PropsWithChildren, useEffect, useMemo, useState } from "react";
 import { createContext } from "./create-context";
 
 type AuthContextState = {
@@ -18,11 +19,66 @@ type JwtPayload = {
   user: User
 }
 
+const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
+
+let failedRequestQueue: any[] = [];
+let isRefreshing = false;
+
 const { ContextProvider, useContext } = createContext<AuthContextState>();
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<User>();
   const [isLoading, setIsLoading] = useState(true);
+
+  // logout user if accessToken (JWT) is invalid.
+  useMemo(() => {
+    axios.interceptors.response.use((x) => {
+      return x
+    }, async (error) => {
+      if (isAxiosError(error) && error.response?.data.properties.isTokenInvalid) {
+        const refreshToken = await AsyncStorage.getItem("refreshToken");
+        const originalConfig = error.config;
+        console.log("Access token expired! Trying to fetch a new one using the stored refresh token...");
+        if (!isRefreshing) {
+          isRefreshing = true;
+          axios
+            .post(`${BASE_URL}/auth/refresh-token`, { refreshToken })
+            .then(async (response) => {
+              const { accessToken, refreshToken: newRefreshToken } = response.data as AuthenticationResponse;
+              await AsyncStorage.setItem("accessToken", accessToken);
+              await AsyncStorage.setItem("refreshToken", newRefreshToken);
+              originalConfig!.headers["Authorization"] = `Bearer ${accessToken}`;
+              console.log("New accessToken and refreshToken fetched successfully...");
+              failedRequestQueue.forEach((request: any) =>
+                request.onSuccess(accessToken)
+              );
+              failedRequestQueue = [];
+            })
+            .catch(async (err) => {
+              failedRequestQueue.forEach((request: any) => request.onFailure(err));
+              failedRequestQueue = [];
+              await logout();
+              console.log("Fetch of a new accessToken failed... ", err);
+            })
+            .finally(() => {
+              isRefreshing = false
+            });
+        }
+        return new Promise((resolve, reject) => {
+          failedRequestQueue.push({
+            onSuccess: (token: string) => {
+              originalConfig!.headers["Authorization"] = `Bearer ${token}`;
+              resolve(axios(originalConfig!));
+            },
+            onFailure: (error: AxiosError) => {
+              reject(error);
+            },
+          });
+        });
+      }
+      return Promise.reject(error);
+    });
+  }, []);
 
   useEffect(() => {
     const getTokenAsync = async () => {
@@ -31,13 +87,10 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       } catch (err) {
         console.log("[useAuthContext] - Erro ao tentar autenticar usuário no inicio da aplicação: ", err);
         await logout();
-
       } finally {
         setIsLoading(false);
       }
-
     }
-
     setIsLoading(true);
     getTokenAsync();
     // eslint-disable-next-line
@@ -50,7 +103,8 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   const login = async () => {
     const accessToken = await AsyncStorage.getItem("accessToken");
-    if (accessToken === null) throw new Error("No access token in storage");
+    const refreshToken = await AsyncStorage.getItem("refreshToken");
+    if (accessToken === null || refreshToken === null) throw new Error("No authentication tokens in storage");
     const decodedUser = await decodeAccessToken(accessToken);
     setUser(decodedUser);
     return decodedUser;
@@ -58,6 +112,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   const logout = async () => {
     await AsyncStorage.removeItem("accessToken");
+    await AsyncStorage.removeItem("refreshToken");
     setUser(undefined);
   }
 
