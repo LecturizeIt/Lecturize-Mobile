@@ -1,6 +1,8 @@
 import { LectureTypes } from "@/types/lecture";
+import { Theme } from "@react-navigation/native";
 import { format } from "date-fns";
 import { ptBR } from 'date-fns/locale';
+import { CustomDarkTheme, CustomLightTheme } from "./themeOptions";
 
 export const formatDateTime = (date: string) => format(new Date(date).toString(), `hh:mm 'de' dd MMM, yyyy`, { locale: ptBR });
 
@@ -41,4 +43,8 @@ export const encodeRFC5987ValueChars = (fileName: string) => {
         String.fromCharCode(parseInt(hex, 16)),
       )
   )
+}
+
+export const getThemeColor = (themeColor: keyof Theme["colors"], colorScheme: "light" | "dark" | undefined) => {
+  return colorScheme === "dark" ? CustomDarkTheme.colors[themeColor] : CustomLightTheme.colors[themeColor];
 }

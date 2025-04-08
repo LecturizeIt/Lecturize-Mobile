@@ -1,8 +1,8 @@
 import { fonts } from "@react-navigation/native/src/theming/fonts";
-import { DefaultTheme, DarkTheme } from "@react-navigation/native";
+import { DefaultTheme, DarkTheme, Theme } from "@react-navigation/native";
 import { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
 
-export const CustomLightTheme: typeof DefaultTheme = {
+export const CustomLightTheme: Theme = {
   dark: false,
   colors: {
     ...DefaultTheme.colors,
@@ -12,7 +12,7 @@ export const CustomLightTheme: typeof DefaultTheme = {
   fonts,
 };
 
-export const CustomDarkTheme: typeof DefaultTheme = {
+export const CustomDarkTheme: Theme = {
   dark: true,
   colors: {
     ...DarkTheme.colors,
