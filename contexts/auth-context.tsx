@@ -1,6 +1,6 @@
 import { AuthenticationResponse, Roles, User } from "@/types/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios, { AxiosError, isAxiosError } from "axios";
+import axios, { AxiosError, HttpStatusCode } from "axios";
 import { jwtDecode } from "jwt-decode";
 import { PropsWithChildren, useEffect, useMemo, useState } from "react";
 import { createContext } from "./create-context";
@@ -30,12 +30,14 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<User>();
   const [isLoading, setIsLoading] = useState(true);
 
-  // logout user if accessToken (JWT) is invalid.
+  // interceptor to refetch a new access token using the stored refresh token
   useMemo(() => {
     axios.interceptors.response.use((x) => {
       return x
-    }, async (error) => {
-      if (isAxiosError(error) && error.response?.data.properties.isTokenInvalid) {
+    }, async (error: AxiosError<any, any>) => {
+      const errorValidation = error.status === HttpStatusCode.Unauthorized && error.response 
+      && error.response?.data.properties && error.response?.data.properties.isTokenInvalid;
+      if (errorValidation) {
         const refreshToken = await AsyncStorage.getItem("refreshToken");
         const originalConfig = error.config;
         console.log("Access token expired! Trying to fetch a new one using the stored refresh token...");

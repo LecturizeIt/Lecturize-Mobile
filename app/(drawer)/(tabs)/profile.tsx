@@ -4,10 +4,11 @@ import { Text, View } from 'react-native';
 
 
 const ProfilePage = () => {
+  const { user } = useAuthContext();
   return (
     <ProtectedRoute directTo="/login">
-      <View className='flex-1 items-center'>
-        <Text className='text-accent'>Profile</Text>
+      <View className='flex-1 items-center justify-center'>
+        <Text className='text-accent text-4xl'>{user?.username}</Text>
       </View>
     </ProtectedRoute>
   );

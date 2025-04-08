@@ -1,23 +1,32 @@
+import CustomDrawerContent from '@/components/custom-drawer-content';
 import CustomHeader from '@/components/custom-header';
 import { Icon } from '@/components/ui/icon';
 import { useAuthContext } from '@/contexts/auth-context';
 import "@/global.css";
+import { getThemeColor } from '@/utilities/utils';
 import { useRouter } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
 import { BookOpenText, KeyRound, Settings } from 'lucide-react-native';
+import { useColorScheme } from 'nativewind';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 
 export default function DrawerLayout() {
   const router = useRouter();
   const { isAuthenticated } = useAuthContext();
+  const { colorScheme } = useColorScheme();
 
   return (
     <GestureHandlerRootView className='flex-1'>
-      <Drawer screenOptions={{
-        drawerStyle: { maxWidth: "70%" },
-        swipeEnabled: false,
-        header: (props) => <CustomHeader {...props} />,
-      }}>
+      <Drawer
+        drawerContent={CustomDrawerContent}
+        screenOptions={{
+          drawerStyle: { maxWidth: "70%", backgroundColor: getThemeColor("background", colorScheme) },
+          swipeEnabled: false,
+          header: (props) => <CustomHeader {...props} />,
+          drawerActiveBackgroundColor: getThemeColor("card", colorScheme),
+          drawerActiveTintColor: "#8d00e7"
+        }}>
         <Drawer.Screen
           name="(tabs)"
           options={{
