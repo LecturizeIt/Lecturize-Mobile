@@ -26,18 +26,25 @@ let isRefreshing = false;
 
 const { ContextProvider, useContext } = createContext<AuthContextState>();
 
+const isTokenExpiredException = (error: AxiosError<any, any>) => {
+  return (
+    error.status === HttpStatusCode.Unauthorized 
+    && error.response 
+    && error.response?.data.properties 
+    && error.response?.data.properties.isTokenInvalid
+  );
+}
+
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<User>();
   const [isLoading, setIsLoading] = useState(true);
 
   // interceptor to refetch a new access token using the stored refresh token
   useMemo(() => {
-    axios.interceptors.response.use((x) => {
-      return x
+    axios.interceptors.response.use((response) => {
+      return response;
     }, async (error: AxiosError<any, any>) => {
-      const errorValidation = error.status === HttpStatusCode.Unauthorized && error.response 
-      && error.response?.data.properties && error.response?.data.properties.isTokenInvalid;
-      if (errorValidation) {
+      if (isTokenExpiredException(error)) {
         const refreshToken = await AsyncStorage.getItem("refreshToken");
         const originalConfig = error.config;
         console.log("Access token expired! Trying to fetch a new one using the stored refresh token...");

@@ -3,7 +3,17 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { DocumentPickerAsset } from "expo-document-picker";
 import { useRouter } from "expo-router";
-import { deleteLecture, deleteLectureImage, postLecture, putLecture, putLectureImage, putLectureShares, putLectureVisits } from "../apis/lectures-api";
+import {
+  deleteComment,
+  deleteLecture,
+  deleteLectureImage,
+  postLecture,
+  postLectureComment,
+  putLecture,
+  putLectureImage,
+  putLectureShares,
+  putLectureVisits
+} from "../apis/lectures-api";
 import { LectureFormValues } from "../schemas/lecture-schema";
 
 
@@ -30,12 +40,12 @@ export const useLectureDeleteMutation = () => {
     mutationFn: deleteLecture,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["lectures", "list"] });
-      showSuccessToast("Palestra deletada com sucesso!");
+      showSuccessToast("Palestra apagada com sucesso!");
       router.push("/");
     },
     onError: (error) => {
       console.log(`[LectureDeleteMutation] - Erro ao fazer uma requisição DELETE à uma palestra': ${error}`);
-      showErrorToast("Falha ao deletar palestra");
+      showErrorToast("Falha ao apagada palestra");
     }
   })
 };
@@ -78,7 +88,7 @@ export const useLectureVisitMutation = () => {
   return useMutation({
     mutationFn: putLectureVisits,
     onError: (error) => {
-      if(isAxiosError(error)) {
+      if (isAxiosError(error)) {
         console.log(error)
       }
       console.log(`[LectureVisit] - Erro ao fazer uma requisição PUT de Visit da Lecture: ${error}`);
@@ -101,7 +111,7 @@ export const useDeleteLectureImageMutation = () => {
   return useMutation({
     mutationFn: deleteLectureImage,
     onError: () => {
-      showErrorToast("Falha ao deletar imagem da palestra");
+      showErrorToast("Falha ao apagar imagem da palestra");
     },
     onSuccess: (_, id, c) => {
       showSuccessToast("Imagem da palestra apagada com sucesso!");
@@ -109,3 +119,33 @@ export const useDeleteLectureImageMutation = () => {
     }
   })
 }
+
+export const useLectureCommentMutation = () => {
+  const { showErrorToast, showSuccessToast } = useCustomToast();
+  return useMutation({
+    mutationFn: postLectureComment,
+    onError: () => {
+      showErrorToast("Falha ao criar um comentário");
+    },
+    onSuccess: () => {
+      showSuccessToast("Comentário criado com sucesso!");
+    }
+  })
+};
+
+export const useCommentDeleteMutation = () => {
+  const { showSuccessToast, showErrorToast } = useCustomToast();
+  return useMutation({
+    mutationFn: deleteComment,
+    onSuccess: () => {
+      showSuccessToast("Comentário apagado com sucesso!");
+    },
+    onError: (error) => {
+      // console.log(`[CommentDeleteMutation] - Erro ao fazer uma requisição DELETE à um comentário': ${error}`);
+      if (isAxiosError(error)) {
+        console.log(error.response?.data)
+      }
+      showErrorToast("Falha ao apagar comentário");
+    }
+  });
+};

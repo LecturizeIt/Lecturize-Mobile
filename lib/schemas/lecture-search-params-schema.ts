@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 export enum SortKey {
-  MOST_VIEWED = "metrics.timesVisited,desc",
-  MOST_SHARED = "metrics.timesShared,desc",
-  NEWEST = "createdAt,desc"
+  MOST_VIEWED = "metrics.timesVisited,id,desc",
+  MOST_SHARED = "metrics.timesShared,id,desc",
+  NEWEST = "createdAt,id,desc"
 }
 
 export const allowedValues = {

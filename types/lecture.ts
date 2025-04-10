@@ -1,4 +1,3 @@
-import type { components } from "@/types/openapi-types";
 import { UserSummary } from "./auth";
 
 export type LectureSummary = {
@@ -39,9 +38,6 @@ export type Lecture = Omit<LectureSummary, "tags"> & {
   maximumCapacity: number | null;
 };
 
-export type LectureWithImage = Lecture & { image?: LectureImageResponse };
-export type LectureImageResponse = Required<components["schemas"]["LectureImageDTO"]>;
-
 export type PaginatedLectures = {
   results: LectureSummary[],
   totalItems: number,
@@ -54,4 +50,11 @@ export const enum LectureTypes {
   PRESENTIAL = "Presencial",
   HYBRID = "Híbrido",
   ONLINE = "Online"
+}
+
+export type LectureComment = {
+  id: string;
+  text: string;
+  user: UserSummary;
+  createdAt: string;
 }
