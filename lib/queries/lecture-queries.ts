@@ -1,5 +1,12 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { fetchLecture, fetchLectures, fetchPaginatedLectures, fetchTags, getLectureImageJson } from "../apis/lectures-api";
+import {
+  fetchLecture,
+  fetchLectureComments,
+  fetchLectures,
+  fetchPaginatedLectures,
+  fetchTags,
+  getLectureImageJson
+} from "../apis/lectures-api";
 
 type LectureQueryParams = {
   q?: string,
@@ -11,11 +18,11 @@ type LectureQueryParams = {
 
 export const useLecturesQuery = (params: LectureQueryParams) => useQuery({
   queryFn: () => fetchLectures(params),
-  queryKey: ["lecture", "list", {...params}],
+  queryKey: ["lecture", "list", { ...params }],
 });
 
 export const useInfiniteLectureQueries = (params: LectureQueryParams) => useInfiniteQuery({
-  queryKey: ["lecture", "list", {...params}],
+  queryKey: ["lecture", "list", { ...params }],
   queryFn: ({ pageParam }) => fetchPaginatedLectures({ pageParam, ...params }),
   initialPageParam: 0,
   getNextPageParam: (lastPage, pages) => lastPage.next,
@@ -39,3 +46,8 @@ export const useLectureImage = (id: string) => {
     queryKey: ["lecture", "detail", "image", id]
   });
 }
+
+export const useLectureCommentsQuery = (id: string) => useQuery({
+  queryFn: () => fetchLectureComments(id),
+  queryKey: ["lecture", "detail", "comment", id]
+})
