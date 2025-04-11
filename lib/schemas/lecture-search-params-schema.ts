@@ -16,7 +16,6 @@ export const LectureSearchParamsSchema = z.object({
   sort: z.enum(allowedValues.sort).catch(SortKey.NEWEST),
   tags: z.string().catch(""),
   lecturer: z.string().catch(""),
-  size: z.number().gt(0).catch(10),
+  size: z.number().gt(0).catch(5),
+  user: z.string().email().catch(""),
 });
-
-export type LectureSearchParams = z.infer<typeof LectureSearchParamsSchema>;

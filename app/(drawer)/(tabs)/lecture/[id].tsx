@@ -21,7 +21,6 @@ const LectureDetailPage = () => {
         <LectureInformation id={id} />
       </VStack>
 
-
       <VStack className="w-full flex-1 items-center gap-6">
         <LectureComments id={id} />
       </VStack>

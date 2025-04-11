@@ -1,4 +1,4 @@
-import { Lecture, LectureComment, LectureImage, LectureSummary, PaginatedLectures, Tag } from "@/types/lecture";
+import { Lecture, LectureComment, LectureImage, LectureSearchParams, LectureSummary, PaginatedLectures, Tag } from "@/types/lecture";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { DocumentPickerAsset } from "expo-document-picker";
@@ -8,18 +8,11 @@ import { LectureSearchParamsSchema } from "../schemas/lecture-search-params-sche
 
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
-type FetchLecturesParams = {
-  q?: string,
-  sort?: string,
-  tags?: string,
-  pageParam: number,
-  lecturer?: string,
-  size?: number
-}
+type FetchLecturesParams = LectureSearchParams & { pageParam: number };
 
-export const fetchLectures = async ({ lecturer, q, sort, tags, size }: Omit<FetchLecturesParams, "pageParam">): Promise<LectureSummary[]> => {
-  const parsed = LectureSearchParamsSchema.parse({ sort, q, tags, lecturer, size });
-  const queryStrings = `?size=${parsed.size}&q=${parsed.q}&sort=${parsed.sort}&tags=${parsed.tags}&lecturer=${parsed.lecturer}`
+export const fetchLectures = async ({ lecturer, q, sort, tags, size, user }: Omit<FetchLecturesParams, "pageParam">): Promise<LectureSummary[]> => {
+  const parsed = LectureSearchParamsSchema.parse({ sort, q, tags, lecturer, size, user });
+  const queryStrings = `?size=${parsed.size}&q=${parsed.q}&sort=${parsed.sort}&tags=${parsed.tags}&lecturer=${parsed.lecturer}&user=${parsed.user}`
   const response = await axios.get<PaginatedLectures>(`${BASE_URL}/lectures${queryStrings}`);
   return response.data.results;
 };
@@ -35,6 +28,14 @@ export const fetchLecture = async (id: string): Promise<Lecture> => {
   const response = await axios.get<Lecture>(`${BASE_URL}/lectures/${id}`);
   return response.data;
 };
+
+export const fetchUserParticipatingLectures = async (): Promise<LectureSummary[]> => {
+  const accessToken = await AsyncStorage.getItem("accessToken");
+  const response = await axios.get<LectureSummary[]>(`${BASE_URL}/user/participating-lectures`, {
+    headers: { "Authorization": `Bearer ${accessToken}` }
+  });
+  return response.data;
+}
 
 export const postLecture = async (lecture: LectureFormValues): Promise<Lecture> => {
   const accessToken = await AsyncStorage.getItem("accessToken");
@@ -95,6 +96,24 @@ export const putLectureVisits = async (id: string) => {
 export const putLectureShares = async (id: string) => {
   await axios.put<Lecture>(`${BASE_URL}/lectures/${id}/share`);
 };
+
+export const putParticipateLecture = async (id: string) => {
+  const accessToken = await AsyncStorage.getItem("accessToken");
+  await axios({
+    url: `${BASE_URL}/lectures/${id}/participate`,
+    method: "put",
+    headers: { "Authorization": `Bearer ${accessToken}` }
+  });
+}
+
+export const putUnparticipateLecture = async (id: string) => {
+  const accessToken = await AsyncStorage.getItem("accessToken");
+  await axios({
+    url: `${BASE_URL}/lectures/${id}/unparticipate`,
+    method: "put",
+    headers: { "Authorization": `Bearer ${accessToken}` }
+  });
+}
 
 export const fetchTags = async (): Promise<Tag[]> => {
   const result = await axios.get<Tag[]>(`${BASE_URL}/tags`);

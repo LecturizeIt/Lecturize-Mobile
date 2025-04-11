@@ -1,3 +1,5 @@
+import { LectureSearchParamsSchema } from "@/lib/schemas/lecture-search-params-schema";
+import { z } from "zod";
 import { UserSummary } from "./auth";
 
 export type LectureSummary = {
@@ -58,3 +60,6 @@ export type LectureComment = {
   user: UserSummary;
   createdAt: string;
 }
+
+export type LectureSearchParamsParsed = z.infer<typeof LectureSearchParamsSchema>;
+export type LectureSearchParams = Partial<Omit<LectureSearchParamsParsed, "sort"> & { sort: string }>;
