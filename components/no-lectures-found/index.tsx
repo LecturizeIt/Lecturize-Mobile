@@ -5,11 +5,16 @@ import { Heading } from "../ui/heading";
 import { Icon } from "../ui/icon";
 import { VStack } from "../ui/vstack";
 
-const NoLecturesFound = ({ className }: { className?: string }) => {
+type NoLecturesFoundProps = {
+  className?: string;
+  title?: string;
+}
+
+const NoLecturesFound = ({ className, title }: NoLecturesFoundProps) => {
   return (
     <View className={clsx("flex-1 items-center justify-center", className)}>
       <VStack className="items-center gap-4">
-        <Heading size="lg" className="text-typography-900">Nenhuma palestra econtrada...</Heading>
+        <Heading size="lg" className="text-typography-900 text-center">{title ? title : "Nenhuma palestra econtrada..."}</Heading>
         <Icon as={Frown} className="ml-2" size="xl" />
       </VStack>
     </View>

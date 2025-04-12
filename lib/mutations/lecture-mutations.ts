@@ -12,7 +12,9 @@ import {
   putLecture,
   putLectureImage,
   putLectureShares,
-  putLectureVisits
+  putLectureVisits,
+  putParticipateLecture,
+  putUnparticipateLecture
 } from "../apis/lectures-api";
 import { LectureFormValues } from "../schemas/lecture-schema";
 
@@ -45,7 +47,7 @@ export const useLectureDeleteMutation = () => {
     },
     onError: (error) => {
       console.log(`[LectureDeleteMutation] - Erro ao fazer uma requisição DELETE à uma palestra': ${error}`);
-      showErrorToast("Falha ao apagada palestra");
+      showErrorToast("Falha ao apagar palestra");
     }
   })
 };
@@ -141,11 +143,36 @@ export const useCommentDeleteMutation = () => {
       showSuccessToast("Comentário apagado com sucesso!");
     },
     onError: (error) => {
-      // console.log(`[CommentDeleteMutation] - Erro ao fazer uma requisição DELETE à um comentário': ${error}`);
-      if (isAxiosError(error)) {
-        console.log(error.response?.data)
-      }
+      console.log(`[CommentDeleteMutation] - Erro ao fazer uma requisição DELETE a um comentário': ${error}`);
       showErrorToast("Falha ao apagar comentário");
     }
   });
 };
+
+export const useLectureParticipateMutation = () => {
+  const { showSuccessToast, showErrorToast } = useCustomToast();
+  return useMutation({
+    mutationFn: putParticipateLecture,
+    onSuccess: () => {
+      showSuccessToast("Sua participação na palestra foi confirmada.");
+    },
+    onError: (error) => {
+      console.log(`[ParticipateLectureMutation] - Erro ao fazer uma requisição PUT a uma participação de palestra': ${error}`);
+      showErrorToast("Falha ao participar da palestra!");
+    }
+  });
+}
+
+export const useLectureUnparticipateMutation = () => {
+  const { showSuccessToast, showErrorToast } = useCustomToast();
+  return useMutation({
+    mutationFn: putUnparticipateLecture,
+    onSuccess: () => {
+      showSuccessToast("Você não está mais participando desta palestra!");
+    },
+    onError: (error) => {
+      console.log(`[UnparticipateLectureMutation] - Erro ao fazer uma requisição PUT a uma desparticipação de palestra': ${error}`);
+      showErrorToast("Falha ao deixar de participar da palestra!");
+    }
+  });
+}

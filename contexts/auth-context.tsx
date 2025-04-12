@@ -49,6 +49,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         const originalConfig = error.config;
         console.log("Access token expired! Trying to fetch a new one using the stored refresh token...");
         if (!isRefreshing) {
+          setIsLoading(true);
           isRefreshing = true;
           axios
             .post(`${BASE_URL}/auth/refresh-token`, { refreshToken })
@@ -70,7 +71,8 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
               console.log("Fetch of a new accessToken failed... ", err);
             })
             .finally(() => {
-              isRefreshing = false
+              isRefreshing = false;
+              setIsLoading(false);
             });
         }
         return new Promise((resolve, reject) => {

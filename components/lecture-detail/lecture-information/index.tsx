@@ -1,6 +1,3 @@
-import { useLectureDetailQuery } from "@/lib/queries/lecture-queries";
-import { formatDate } from "@/utilities/utils";
-import { PropsWithChildren } from "react";
 import ErrorFallback from "@/components/error-fallback";
 import SuspenseLoading from "@/components/suspense-loading";
 import { Card } from "@/components/ui/card";
@@ -8,10 +5,14 @@ import { Heading } from "@/components/ui/heading";
 import { HStack } from "@/components/ui/hstack";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
+import { useLectureDetailQuery } from "@/lib/queries/lecture-queries";
+import { formatDate } from "@/utilities/utils";
+import { PropsWithChildren } from "react";
+import LectureParticipate from "./components/lecture-participate";
 import LectureTags from "./components/lecture-tags";
+import Lecturer from "./components/lecturer";
 import TimeInfo from "./components/time-info";
 import TypeInfo from "./components/type-info";
-import Lecturer from "./components/lecturer";
 
 
 const LectureInformation = ({ id }: { id: string }) => {
@@ -46,6 +47,8 @@ const LectureInformation = ({ id }: { id: string }) => {
       </VStack>
       <Text className="text-typography-500 mb-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae fuga doloribus, architecto excepturi alias corrupti enim quam reprehenderit quibusdam rem?</Text>
       <Lecturer lecture={lecture!} />
+      
+      <LectureParticipate id={id} />
     </Layout>
   )
 }

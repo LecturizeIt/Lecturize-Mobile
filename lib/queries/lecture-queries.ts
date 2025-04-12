@@ -1,3 +1,4 @@
+import { LectureSearchParams } from "@/types/lecture";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import {
   fetchLecture,
@@ -5,23 +6,16 @@ import {
   fetchLectures,
   fetchPaginatedLectures,
   fetchTags,
+  fetchUserParticipatingLectures,
   getLectureImageJson
 } from "../apis/lectures-api";
 
-type LectureQueryParams = {
-  q?: string,
-  sort?: string,
-  tags?: string,
-  lecturer?: string,
-  size?: number
-}
-
-export const useLecturesQuery = (params: LectureQueryParams) => useQuery({
+export const useLecturesQuery = (params: LectureSearchParams) => useQuery({
   queryFn: () => fetchLectures(params),
   queryKey: ["lecture", "list", { ...params }],
 });
 
-export const useInfiniteLectureQueries = (params: LectureQueryParams) => useInfiniteQuery({
+export const useInfiniteLectureQueries = (params: LectureSearchParams) => useInfiniteQuery({
   queryKey: ["lecture", "list", { ...params }],
   queryFn: ({ pageParam }) => fetchPaginatedLectures({ pageParam, ...params }),
   initialPageParam: 0,
@@ -50,4 +44,9 @@ export const useLectureImage = (id: string) => {
 export const useLectureCommentsQuery = (id: string) => useQuery({
   queryFn: () => fetchLectureComments(id),
   queryKey: ["lecture", "detail", "comment", id]
+})
+
+export const useUserParticipatingLectures = () => useQuery({
+  queryFn: fetchUserParticipatingLectures,
+  queryKey: ["lecture", "detail", "participating"],
 })
