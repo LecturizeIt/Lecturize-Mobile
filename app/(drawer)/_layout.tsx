@@ -1,5 +1,6 @@
 import CustomDrawerContent from '@/components/custom-drawer-content';
 import CustomHeader from '@/components/custom-header';
+import SuspenseLoading from '@/components/suspense-loading';
 import { Icon } from '@/components/ui/icon';
 import { useAuthContext } from '@/contexts/auth-context';
 import "@/global.css";

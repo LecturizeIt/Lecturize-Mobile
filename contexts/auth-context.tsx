@@ -28,9 +28,9 @@ const { ContextProvider, useContext } = createContext<AuthContextState>();
 
 const isTokenExpiredException = (error: AxiosError<any, any>) => {
   return (
-    error.status === HttpStatusCode.Unauthorized 
-    && error.response 
-    && error.response?.data.properties 
+    error.status === HttpStatusCode.Unauthorized
+    && error.response
+    && error.response?.data.properties
     && error.response?.data.properties.isTokenInvalid
   );
 }
@@ -46,10 +46,11 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     }, async (error: AxiosError<any, any>) => {
       if (isTokenExpiredException(error)) {
         const refreshToken = await AsyncStorage.getItem("refreshToken");
+        if (!refreshToken) return Promise.reject(error);
         const originalConfig = error.config;
+        
         console.log("Access token expired! Trying to fetch a new one using the stored refresh token...");
         if (!isRefreshing) {
-          setIsLoading(true);
           isRefreshing = true;
           axios
             .post(`${BASE_URL}/auth/refresh-token`, { refreshToken })
@@ -72,7 +73,6 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
             })
             .finally(() => {
               isRefreshing = false;
-              setIsLoading(false);
             });
         }
         return new Promise((resolve, reject) => {
